@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapyRank — Profile</title>
+<link rel="icon" type="image/png" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg:           #1c1a17;
+  --bg-card:      #242220;
+  --bg-card-2:    #2a2825;
+  --bg-hover:     #2f2d29;
+  --border:       rgba(255,255,255,0.06);
+  --border-warm:  rgba(210,160,60,0.18);
+
+  --yellow:       #f5c842;
+  --yellow-dim:   #c8a030;
+  --yellow-glow:  rgba(245,200,66,0.15);
+
+  --text:         #f0ebe0;
+  --text-dim:     rgba(240,235,224,0.5);
+  --text-dimmer:  rgba(240,235,224,0.28);
+
+  --green:        #4cca6a;
+  --radius:       12px;
+  --radius-sm:    8px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+#header-band {
+  background: var(--yellow);
+  position: relative;
+  z-index: 10;
+}
+
+#header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+#logo-capy {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  object-position: top;
+  position: relative;
+  bottom: -5px;
+  flex-shrink: 0;
+}
+
+#logo-text {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #1c1a17;
+  letter-spacing: -0.02em;
+}
+#logo-text span { color: rgba(0,0,0,0.45); font-weight: 700; }
+
+.btn-join {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  background: #1c1a17;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-join:hover { background: #2f2d29; transform: translateY(-1px); }
+.nav-discord {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--text-dim);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-discord:hover { color: var(--text); background: var(--bg-hover); }
+.nav-discord svg { width: 20px; height: 20px; }
+
+/* ============================================================
+   MAIN
+============================================================ */
+#main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   NOT FOUND
+============================================================ */
+#not-found {
+  text-align: center;
+  padding: 80px 24px;
+  display: none;
+}
+#not-found .nf-icon { font-size: 64px; margin-bottom: 16px; }
+#not-found h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#not-found p { color: var(--text-dim); margin-bottom: 24px; }
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--yellow);
+  color: #1c1a17;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: transform 0.15s;
+}
+.btn-back:hover { transform: translateY(-1px); }
+
+/* ============================================================
+   LOADING
+============================================================ */
+#loading {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-dimmer);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+}
+
+/* ============================================================
+   PROFILE HERO
+============================================================ */
+#profile-content { display: none; }
+
+#profile-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+  animation: fade-up 0.4s ease both;
+}
+
+#avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 36px;
+  color: rgba(255,255,255,0.7);
+}
+
+#live-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: var(--green);
+  border: 2px solid var(--bg);
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  color: #fff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: none;
+}
+
+#profile-meta { flex: 1; min-width: 0; }
+
+#profile-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: clamp(26px, 4vw, 38px);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+#profile-league {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--yellow-glow);
+  border: 1px solid var(--border-warm);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--yellow);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+#profile-followers {
+  font-size: 13px;
+  color: var(--text-dimmer);
+}
+
+#twitch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  background: #6441a5;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+#twitch-link:hover { opacity: 0.85; }
+
+/* ============================================================
+   STAT CARDS
+============================================================ */
+#stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+  animation: fade-up 0.4s ease 0.08s both;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.stat-card:hover { border-color: var(--border-warm); }
+.stat-card:first-child { border-color: rgba(245,200,66,0.25); }
+
+.sc-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--yellow);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.stat-card:not(:first-child) .sc-num { color: var(--text); font-size: 22px; }
+
+.sc-label {
+  font-size: 11px;
+  color: var(--text-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 5px;
+}
+
+/* ============================================================
+   TOP GIVERS
+============================================================ */
+#top-givers-section {
+  animation: fade-up 0.4s ease 0.14s both;
+}
+
+#top-givers-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+#top-givers-section h2 span { color: var(--yellow); }
+
+#giver-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.giver-tab {
+  padding: 5px 13px;
+  border-radius: 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-dimmer);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.giver-tab:hover { color: var(--text-dim); }
+.giver-tab.active {
+  background: var(--bg-card-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+#givers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.giver-entry {
+  display: grid;
+  grid-template-columns: 32px 32px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: background 0.12s, border-color 0.12s;
+}
+.giver-entry:hover { background: var(--bg-hover); border-color: var(--border-warm); }
+.giver-entry.rank-1 { border-color: rgba(245,200,66,0.3); }
+.giver-entry.rank-2 { border-color: rgba(200,200,200,0.18); }
+.giver-entry.rank-3 { border-color: rgba(180,120,60,0.25); }
+
+.ge-rank {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--text-dimmer);
+  text-align: center;
+}
+.rank-1 .ge-rank { color: var(--yellow); }
+.rank-2 .ge-rank { color: #c0c0c0; }
+.rank-3 .ge-rank { color: #c87840; }
+
+.ge-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Nunito', sans-serif;
+  flex-shrink: 0;
+}
+.ge-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+.ge-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+}
+.ge-name:hover { color: var(--accent); }
+
+.ge-score {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--yellow);
+}
+.ge-score-label {
+  font-size: 10px;
+  color: var(--text-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: right;
+}
+
+#givers-empty {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--text-dimmer);
+  font-size: 14px;
+  display: none;
+}
+
+/* ============================================================
+   VIEWER SECTION
+============================================================ */
+#viewer-section {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  animation: fade-up 0.4s ease 0.2s both;
+  display: none;
+}
+
+#viewer-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+#viewer-section h2 span { color: var(--yellow); }
+
+#viewer-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+#given-breakdown h3 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
+.breakdown-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+}
+.be-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.be-score {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--yellow);
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+#footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dimmer);
+  position: relative;
+  z-index: 1;
+}
+#footer a { color: var(--text-dim); text-decoration: none; }
+#footer a:hover { color: var(--text); }
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-live {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+@media (max-width: 600px) {
+  #profile-hero { flex-direction: column; align-items: flex-start; gap: 16px; }
+  #profile-avatar { width: 72px; height: 72px; font-size: 28px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header-band">
+  <div id="header-inner">
+    <a href="/" id="logo">
+      <img src="../icon.png" alt="CapyRank" id="logo-capy">
+      <div id="logo-text">Capy<span>Rank</span></div>
+    </a>
+    <nav id="header-nav">
+      <a href="/faq/" class="nav-link">FAQ</a>
+      <a href="#" class="nav-discord" title="CapyRank Discord — coming soon" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+      </a>
+      <a href="/#leaderboard-section" class="btn-join">← Rankings</a>
+    </nav>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main">
+
+  <div id="loading">Loading profile… 🐾</div>
+
+  <div id="not-found">
+    <div class="nf-icon">🐾</div>
+    <h2>Streamer not found</h2>
+    <p>This channel hasn't joined CapyRank yet.</p>
+    <a href="/" class="btn-back">← Back to Rankings</a>
+  </div>
+
+  <div id="profile-content">
+
+    <!-- HERO -->
+    <div id="profile-hero">
+      <div id="avatar-wrap">
+        <div id="profile-avatar">?</div>
+        <div id="live-badge">● Live</div>
+      </div>
+      <div id="profile-meta">
+        <div id="profile-name">—</div>
+        <div id="profile-league">🐾 Capy Cub</div>
+        <div id="profile-followers">— followers</div>
+        <a id="twitch-link" href="#" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+          Watch on Twitch
+        </a>
+      </div>
+    </div>
+
+    <!-- STAT CARDS (streamer) -->
+    <div id="stat-cards">
+      <div class="stat-card">
+        <div class="sc-num" id="sc-total">—</div>
+        <div class="sc-label">Total Capys</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-num" id="sc-today">—</div>
+        <div class="sc-label">Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-num" id="sc-week">—</div>
+        <div class="sc-label">This Week</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-num" id="sc-month">—</div>
+        <div class="sc-label">This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-num" id="sc-year">—</div>
+        <div class="sc-label">This Year</div>
+      </div>
+    </div>
+
+    <!-- TOP GIVERS -->
+    <div id="top-givers-section">
+      <h2>Top <span>Supporters</span></h2>
+      <div id="giver-tabs">
+        <button class="giver-tab" data-period="today">Today</button>
+        <button class="giver-tab active" data-period="week">This Week</button>
+        <button class="giver-tab" data-period="month">This Month</button>
+        <button class="giver-tab" data-period="year">This Year</button>
+        <button class="giver-tab" data-period="alltime">All Time</button>
+      </div>
+      <div id="givers-list"></div>
+      <div id="givers-empty">No capys given in this period yet. 🐾</div>
+    </div>
+
+    <!-- VIEWER SECTION -->
+    <div id="viewer-section">
+      <h2>Viewer <span>Stats</span></h2>
+      <div id="viewer-stats">
+        <div class="stat-card">
+          <div class="sc-num" id="vc-total">—</div>
+          <div class="sc-label">Capys Given</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num" id="vc-today">—</div>
+          <div class="sc-label">Given Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num" id="vc-remaining">—</div>
+          <div class="sc-label">Remaining Today</div>
+        </div>
+      </div>
+      <div id="given-breakdown">
+        <h3>Where they've given capys</h3>
+        <div id="breakdown-list"></div>
+      </div>
+    </div>
+
+  </div><!-- /profile-content -->
+</main>
+
+<footer id="footer">
+  <p>🐾 CapyRank — <a href="/">Back to Rankings</a> &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#345c5158585b745755444d46555a5f1a575b59"><span class="__cf_email__" data-cfemail="177f727b7b78577476676e6576797c3974787a">[email&#160;protected]</span></a></p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+import { initializeApp }     from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
+import { getFirestore, collection, doc, getDoc, query, where, orderBy, limit, getDocs }
+  from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
+
+// ============================================================
+//  FIREBASE INIT
+// ============================================================
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
+  authDomain:        "capyrank-d8779.firebaseapp.com",
+  projectId:         "capyrank-d8779",
+  storageBucket:     "capyrank-d8779.firebasestorage.app",
+  messagingSenderId: "1038634831025",
+  appId:             "1:1038634831025:web:44801e37a6ac593b336690"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ============================================================
+//  LEAGUE HELPER
+// ============================================================
+const LEAGUES = [
+  { name: 'Capy Cub 🌱',    min: 0,    max: 100    },
+  { name: 'Capy 🌿',        min: 101,  max: 300    },
+  { name: 'Capy Crew 🐾',   min: 301,  max: 750    },
+  { name: 'Capy Colony 🏡', min: 751,  max: 2000   },
+  { name: 'Capy Kingdom 👑',min: 2001, max: Infinity},
+];
+
+function getLeague(followers) {
+  return LEAGUES.find(l => followers >= l.min && followers <= l.max)?.name ?? 'Capy Cub 🌱';
+}
+
+// ============================================================
+//  GIVER PERIOD CONFIG
+// ============================================================
+const PERIOD_FIELD = {
+  today:   'given_today',
+  week:    'given_this_week',
+  month:   'given_this_month',
+  year:    'given_this_year',
+  alltime: 'total_given_alltime',
+};
+
+// ============================================================
+//  URL PARAM
+// ============================================================
+const params   = new URLSearchParams(window.location.search);
+const username = (params.get('user') || '').toLowerCase().trim();
+
+if (!username) {
+  showNotFound();
+} else {
+  loadProfile(username);
+}
+
+// ============================================================
+//  LOAD PROFILE
+// ============================================================
+async function loadProfile(username) {
+  // Find streamer by username field
+  const q    = query(collection(db, 'streamers'), where('username', '==', username), limit(1));
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    // Also check if it's a viewer-only profile
+    await loadViewerProfile(username);
+    return;
+  }
+
+  const docSnap    = snap.docs[0];
+  const streamerId = docSnap.id;
+  const data       = docSnap.data();
+
+  document.title = `${data.display_name || username} — CapyRank`;
+
+  // Avatar
+  const avatarEl = document.getElementById('profile-avatar');
+  if (data.avatar_url) {
+    const img = document.createElement('img');
+    img.src = data.avatar_url;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    img.alt = data.display_name || username;
+    avatarEl.innerHTML = '';
+    avatarEl.appendChild(img);
+  } else {
+    avatarEl.textContent = (data.display_name || username)[0].toUpperCase();
+  }
+
+  // Live badge
+  if (data.live) {
+    const badge = document.getElementById('live-badge');
+    badge.style.display = 'block';
+    badge.style.animation = 'pulse-live 2s ease-in-out infinite';
+  }
+
+  // Name, league, followers
+  document.getElementById('profile-name').textContent      = data.display_name || username;
+  document.getElementById('profile-league').textContent    = '🐾 ' + getLeague(data.followers || 0);
+  document.getElementById('profile-followers').textContent = `${(data.followers || 0).toLocaleString()} followers`;
+
+  // Twitch link
+  const twitchLink = document.getElementById('twitch-link');
+  twitchLink.href = `https://twitch.tv/${username}`;
+
+  // Stat cards
+  animateStat('sc-total', data.capys_total       || 0);
+  animateStat('sc-today', data.capys_today        || 0);
+  animateStat('sc-week',  data.capys_this_week    || 0);
+  animateStat('sc-month', data.capys_this_month   || 0);
+  animateStat('sc-year',  data.capys_this_year    || 0);
+
+  // Show content
+  document.getElementById('loading').style.display         = 'none';
+  document.getElementById('profile-content').style.display = 'block';
+
+  // Top givers
+  loadTopGivers(streamerId, 'week');
+
+  // Also check if this person is a viewer
+  await loadViewerSection(username);
+
+  // Tab switching
+  document.querySelectorAll('.giver-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.giver-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadTopGivers(streamerId, btn.dataset.period);
+    });
+  });
+}
+
+// ============================================================
+//  TOP GIVERS
+// ============================================================
+async function loadTopGivers(streamerId, period) {
+  const list  = document.getElementById('givers-list');
+  const empty = document.getElementById('givers-empty');
+  const field = PERIOD_FIELD[period] || 'total_given_alltime';
+
+  list.innerHTML  = '<div style="padding:20px;text-align:center;color:var(--text-dimmer);font-size:13px;">Loading…</div>';
+  empty.style.display = 'none';
+
+  // Query transactions for this streamer, ordered by the relevant period field
+  // Note: this requires a composite index in Firestore (to_streamer_id + field desc)
+  // For now we fetch all and sort client-side as a fallback
+  try {
+    const q    = query(
+      collection(db, 'transactions'),
+      where('to_streamer_id', '==', streamerId),
+      orderBy(field, 'desc'),
+      limit(10)
+    );
+    const snap = await getDocs(q);
+    const givers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    renderGivers(givers, field);
+  } catch(e) {
+    // Index not ready yet — show empty
+    list.innerHTML = '';
+    empty.style.display = 'block';
+  }
+}
+
+function renderGivers(givers, field) {
+  const list  = document.getElementById('givers-list');
+  const empty = document.getElementById('givers-empty');
+  list.innerHTML = '';
+
+  if (givers.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  givers.forEach((g, i) => {
+    const rank      = i + 1;
+    const rankClass = rank <= 3 ? ` rank-${rank}` : '';
+    const medal     = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const score     = g[field] ?? 0;
+
+    const el = document.createElement('div');
+    el.className = `giver-entry${rankClass}`;
+    el.innerHTML = `
+      <div class="ge-rank">${medal}</div>
+      <div class="ge-avatar" style="background:${avatarColour(g.from_user_id || g.from_user || '?')}">
+        ${g.avatar_url ? `<img src="${escHtml(g.avatar_url)}" alt="">` : (g.display_name || g.from_user || '?')[0].toUpperCase()}
+      </div>
+      <a class="ge-name" href="/profile/?user=${encodeURIComponent(g.from_user || '')}">
+        ${escHtml(g.display_name || g.from_user || '?')}
+      </a>
+      <div style="text-align:right">
+        <div class="ge-score">${score.toLocaleString()}</div>
+        <div class="ge-score-label">Capys</div>
+      </div>
+    `;
+
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(6px)';
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.2s ease, transform 0.2s ease, background 0.12s, border-color 0.12s';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, i * 35);
+
+    list.appendChild(el);
+  });
+}
+
+// ============================================================
+//  VIEWER SECTION
+// ============================================================
+async function loadViewerSection(username) {
+  const q    = query(collection(db, 'users'), where('username', '==', username), limit(1));
+  const snap = await getDocs(q);
+  if (snap.empty) return;
+
+  const data = snap.docs[0].data();
+  const DAILY = 100;
+
+  document.getElementById('viewer-section').style.display = 'block';
+  animateStat('vc-total',     data.total_given_alltime || 0);
+  animateStat('vc-today',     data.daily_given         || 0);
+  animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
+
+  // Breakdown — fetch transactions FROM this user
+  const userId = snap.docs[0].id;
+  loadGivenBreakdown(userId);
+}
+
+async function loadViewerProfile(username) {
+  // Pure viewer — not a registered streamer
+  const q    = query(collection(db, 'users'), where('username', '==', username), limit(1));
+  const snap = await getDocs(q);
+
+  if (snap.empty) { showNotFound(); return; }
+
+  const data = snap.docs[0].data();
+  const DAILY = 100;
+
+  document.title = `${data.display_name || username} — CapyRank`;
+
+  // Show a minimal profile — no streamer card, just viewer stats
+  const avatarEl = document.getElementById('profile-avatar');
+  avatarEl.textContent = (data.display_name || username)[0].toUpperCase();
+
+  document.getElementById('profile-name').textContent      = data.display_name || username;
+  document.getElementById('profile-league').style.display  = 'none';
+  document.getElementById('profile-followers').style.display = 'none';
+  document.getElementById('twitch-link').style.display     = 'none';
+  document.getElementById('stat-cards').style.display      = 'none';
+  document.getElementById('top-givers-section').style.display = 'none';
+
+  document.getElementById('loading').style.display         = 'none';
+  document.getElementById('profile-content').style.display = 'block';
+
+  document.getElementById('viewer-section').style.display  = 'block';
+  animateStat('vc-total',     data.total_given_alltime || 0);
+  animateStat('vc-today',     data.daily_given         || 0);
+  animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
+
+  loadGivenBreakdown(snap.docs[0].id);
+}
+
+async function loadGivenBreakdown(userId) {
+  const breakdown = document.getElementById('breakdown-list');
+  try {
+    const q    = query(
+      collection(db, 'transactions'),
+      where('from_user_id', '==', userId),
+      orderBy('total_given_alltime', 'desc'),
+      limit(10)
+    );
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      breakdown.innerHTML = '<p style="color:var(--text-dimmer);font-size:13px;">No capys given yet.</p>';
+      return;
+    }
+    snap.docs.forEach(d => {
+      const g  = d.data();
+      const el = document.createElement('div');
+      el.className = 'breakdown-entry';
+      el.innerHTML = `
+        <span class="be-name">${escHtml(g.to_streamer_name || '?')}</span>
+        <span class="be-score">${(g.total_given_alltime || 0).toLocaleString()} capys</span>
+      `;
+      breakdown.appendChild(el);
+    });
+  } catch(e) {
+    breakdown.innerHTML = '<p style="color:var(--text-dimmer);font-size:13px;">Could not load breakdown.</p>';
+  }
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function showNotFound() {
+  document.getElementById('loading').style.display   = 'none';
+  document.getElementById('not-found').style.display = 'block';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function animateStat(id, to, duration = 800) {
+  const el = document.getElementById(id);
+  if (!el || to === 0) { if(el) el.textContent = '0'; return; }
+  const start = performance.now();
+  function step(now) {
+    const t   = Math.min((now - start) / duration, 1);
+    const val = Math.round(to * (t < 0.5 ? 2*t*t : -1+(4-2*t)*t));
+    el.textContent = val.toLocaleString();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>
