@@ -899,7 +899,7 @@ async function renderLeaderboard() {
 
     const el = document.createElement('a');
     el.className = `entry${rankClass}`;
-    el.href = `/profile/?user=${encodeURIComponent(s.username || s.id)}`;
+    el.href = `/profile/?user=${encodeURIComponent(s.id)}`;
     el.innerHTML = `
       <div class="entry-rank">${medal}</div>
       <div class="entry-info">
@@ -910,7 +910,7 @@ async function renderLeaderboard() {
         </div>
         <div>
           <div class="entry-name">
-            ${live ? '<span class="live-dot"></span>' : ''}${escHtml(s.display_name || s.username || s.id)}
+            ${live ? '<span class="live-dot"></span>' : ''}${escHtml(s.display_name || s.id)}
           </div>
           <div class="entry-sub">${followers.toLocaleString()} followers</div>
         </div>
