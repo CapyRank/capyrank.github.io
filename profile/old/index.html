@@ -362,7 +362,7 @@ body::before {
 
 .giver-entry {
   display: grid;
-  grid-template-columns: 32px 32px 1fr auto;
+  grid-template-columns: 32px 1fr auto;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
@@ -387,31 +387,12 @@ body::before {
 .rank-2 .ge-rank { color: #c0c0c0; }
 .rank-3 .ge-rank { color: #c87840; }
 
-.ge-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--bg-hover);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.7);
-  font-family: 'Nunito', sans-serif;
-  flex-shrink: 0;
-}
-.ge-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
 .ge-name {
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: 14px;
   color: var(--text);
-  text-decoration: none;
 }
-.ge-name:hover { color: var(--accent); }
 
 .ge-score {
   font-family: 'Nunito', sans-serif;
@@ -829,12 +810,7 @@ function renderGivers(givers, field) {
     el.className = `giver-entry${rankClass}`;
     el.innerHTML = `
       <div class="ge-rank">${medal}</div>
-      <div class="ge-avatar" style="background:${avatarColour(g.from_user_id || g.from_user || '?')}">
-        ${g.avatar_url ? `<img src="${escHtml(g.avatar_url)}" alt="">` : (g.display_name || g.from_user || '?')[0].toUpperCase()}
-      </div>
-      <a class="ge-name" href="/profile/?user=${encodeURIComponent(g.from_user || '')}">
-        ${escHtml(g.display_name || g.from_user || '?')}
-      </a>
+      <div class="ge-name">${escHtml(g.display_name || g.from_user || '?')}</div>
       <div style="text-align:right">
         <div class="ge-score">${score.toLocaleString()}</div>
         <div class="ge-score-label">Capys</div>
