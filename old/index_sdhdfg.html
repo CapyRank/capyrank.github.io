@@ -648,7 +648,7 @@ body::before {
     </a>
     <nav id="header-nav">
       <a href="#how" class="nav-link">How it works</a>
-      <a href="https://capyrank.com/join" class="btn-join" id="btn-join-header">Join CapyRank</a>
+      <a href="#" class="btn-join" id="btn-join-header">Join CapyRank</a>
     </nav>
   </div>
 </div>
@@ -660,7 +660,7 @@ body::before {
   <div id="hero-eyebrow">🐾 Community-voted streamer discovery</div>
   <h1>Give your <em>Capys</em> to streamers you love</h1>
   <p>100 Capys a day. Spend them on any stream using CapyRank. The community decides who gets seen — not the algorithm.</p>
-  <a href="https://capyrank.com/join" class="btn-primary" id="btn-join-hero">
+  <a href="#" class="btn-primary" id="btn-join-hero">
     🐾 Join CapyRank
   </a>
   <a href="#leaderboard-section" class="btn-secondary">See the rankings</a>
@@ -957,7 +957,14 @@ document.querySelectorAll('.time-btn').forEach(btn => {
 // ============================================================
 //  JOIN BUTTONS — placeholder for Twitch OAuth
 // ============================================================
-
+document.getElementById('btn-join-header').addEventListener('click', e => {
+  e.preventDefault();
+  alert('Twitch auth coming soon!');
+});
+document.getElementById('btn-join-hero').addEventListener('click', e => {
+  e.preventDefault();
+  alert('Twitch auth coming soon!');
+});
 
 // ============================================================
 //  UTILS
