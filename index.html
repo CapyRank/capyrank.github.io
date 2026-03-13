@@ -713,7 +713,7 @@ body::before {
       <div id="time-filter">
         <button class="time-btn" data-time="today">Today</button>
         <button class="time-btn active" data-time="week">This Week</button>
-        <button class="time-btn" data-time="month">Month</button>
+        <button class="time-btn" data-time="month">This Month</button>
         <button class="time-btn" data-time="year">This Year</button>
         <button class="time-btn" data-time="alltime">All Time</button>
       </div>
@@ -991,4 +991,14 @@ function animateStat(id, from, to, duration) {
     const t   = Math.min((now - start) / duration, 1);
     const val = Math.round(from + (to - from) * (t < 0.5 ? 2*t*t : -1+(4-2*t)*t));
     el.textContent = val.toLocaleString();
-    if (t < 1) requestAnimationFrame(st
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Init
+fetchStats();
+renderLeaderboard();
+</script>
+</body>
+</html>
