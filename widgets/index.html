@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Widgets — CapyRank</title>
+<meta name="description" content="Free Twitch panel images and stream widgets for CapyRank streamers.">
+<link rel="icon" type="image/png" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg:           #1c1a17;
+  --bg-card:      #242220;
+  --bg-card-2:    #2a2825;
+  --bg-hover:     #2f2d29;
+  --border:       rgba(255,255,255,0.06);
+  --border-warm:  rgba(210,160,60,0.18);
+  --yellow:       #f5c842;
+  --yellow-dim:   #c8a030;
+  --yellow-glow:  rgba(245,200,66,0.15);
+  --text:         #f0ebe0;
+  --text-dim:     rgba(240,235,224,0.5);
+  --text-dimmer:  rgba(240,235,224,0.28);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* HEADER */
+#header-band { background: var(--yellow); position: relative; z-index: 10; overflow: visible; }
+#header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+#logo { display: flex; align-items: center; gap: 10px; text-decoration: none; position: relative; z-index: 20; }
+#logo-capy { width: 80px; height: 80px; object-fit: cover; object-position: top; position: relative; bottom: -5px; flex-shrink: 0; }
+#logo-text { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; color: #1c1a17; letter-spacing: -0.02em; line-height: 1; }
+#logo-text span { color: rgba(0,0,0,0.45); font-weight: 700; }
+#header-nav { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(0,0,0,0.6);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.01em;
+}
+.nav-link:hover { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.85); }
+.btn-join {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  background: #1c1a17;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.15s, transform 0.1s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-join:hover { background: #2f2d29; transform: translateY(-1px); }
+.nav-discord {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px;
+  color: rgba(0,0,0,0.4);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-discord:hover { color: rgba(0,0,0,0.7); background: rgba(0,0,0,0.08); }
+.nav-discord svg { width: 20px; height: 20px; }
+
+/* MAIN */
+#main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+  position: relative;
+  z-index: 1;
+}
+
+#page-header { margin-bottom: 56px; }
+#page-header h1 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+#page-header h1 span { color: var(--yellow); }
+#page-header p { color: var(--text-dim); font-size: 15px; }
+
+/* SECTION */
+.widget-section { margin-bottom: 64px; }
+.widget-section-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--yellow-dim);
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-warm);
+}
+
+/* PANEL GRID */
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.panel-card:hover { border-color: var(--border-warm); }
+
+.panel-preview {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card-2);
+  border-bottom: 1px solid var(--border);
+}
+.panel-preview img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
+
+.panel-info {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.panel-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+}
+.panel-meta {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 2px;
+}
+
+.btn-download {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  color: #1c1a17;
+  background: var(--yellow);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+.btn-download:hover { background: var(--yellow-dim); color: #fff; transform: translateY(-1px); }
+.btn-download svg { width: 13px; height: 13px; }
+
+/* COMING SOON CARD */
+.coming-soon-card {
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-dimmer);
+}
+.coming-soon-card .cs-icon { font-size: 32px; margin-bottom: 12px; }
+.coming-soon-card .cs-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.coming-soon-card .cs-body { font-size: 13px; line-height: 1.6; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 28px 24px;
+  color: var(--text-dimmer);
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
+}
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--text); }
+
+@media (max-width: 600px) {
+  #main { padding: 40px 16px 64px; }
+  .panel-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div id="header-band">
+  <div id="header-inner">
+    <a href="/" id="logo">
+      <img src="../icon.png" alt="CapyRank" id="logo-capy">
+      <div id="logo-text">Capy<span>Rank</span></div>
+    </a>
+    <nav id="header-nav">
+      <a href="/faq/" class="nav-link">FAQ</a>
+      <a href="/widgets/" class="nav-link">Widgets</a>
+      <a href="#" class="nav-discord" title="CapyRank Discord — coming soon" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+      </a>
+      <a href="https://capyrank.com/join" class="btn-join">Join CapyRank</a>
+    </nav>
+  </div>
+</div>
+
+<main id="main">
+
+  <div id="page-header">
+    <h1>Stream <span>widgets</span></h1>
+    <p>Free assets to show off your CapyRank on stream and in your Twitch panels.</p>
+  </div>
+
+  <!-- PANEL IMAGES -->
+  <div class="widget-section">
+    <div class="widget-section-title">Twitch Panel Images</div>
+    <div class="panel-grid">
+
+      <div class="panel-card">
+        <div class="panel-preview">
+          <img src="../assets/panels/panel_dark.png" alt="CapyRank panel — dark variant">
+        </div>
+        <div class="panel-info">
+          <div>
+            <div class="panel-label">Dark Panel</div>
+            <div class="panel-meta">320 × 160px · PNG</div>
+          </div>
+          <a href="../assets/panels/panel_dark.png" download="capyrank-panel-dark.png" class="btn-download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-preview">
+          <img src="../assets/panels/panel_light.png" alt="CapyRank panel — light variant">
+        </div>
+        <div class="panel-info">
+          <div>
+            <div class="panel-label">Light Panel</div>
+            <div class="panel-meta">320 × 160px · PNG</div>
+          </div>
+          <a href="../assets/panels/panel_light.png" download="capyrank-panel-light.png" class="btn-download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STREAM OVERLAY — COMING SOON -->
+  <div class="widget-section">
+    <div class="widget-section-title">Stream Overlay</div>
+    <div class="coming-soon-card">
+      <div class="cs-icon">🐾</div>
+      <div class="cs-title">Capy Alert Overlay — Coming Soon</div>
+      <div class="cs-body">A browser source overlay for OBS that shows an animation whenever your viewers give Capys. Add it to your stream and let your community know their support is being seen.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras.</p>
+</footer>
+
+</body>
+</html>
