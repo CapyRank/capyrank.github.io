@@ -679,8 +679,8 @@ body::before {
     <div class="stat-label">Capys given today</div>
   </div>
   <div class="stat">
-    <div class="stat-num" id="stat-alltime">—</div>
-    <div class="stat-label">Capys All Time</div>
+    <div class="stat-num" id="stat-communities">—</div>
+    <div class="stat-label">Communities</div>
   </div>
 </div>
 
@@ -854,8 +854,8 @@ async function fetchStats() {
     metaSnap.forEach(doc => {
       if (doc.id === 'global') {
         const d = doc.data();
-        if (d.capys_today)   animateStat('stat-capys',   0, d.capys_today,   1200);
-        if (d.capys_alltime) animateStat('stat-alltime', 0, d.capys_alltime, 1400);
+        if (d.capys_today)    animateStat('stat-capys',        0, d.capys_today,    1200);
+        if (d.active_channels) animateStat('stat-communities', 0, d.active_channels, 1400);
       }
     });
   } catch(e) {
