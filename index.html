@@ -770,58 +770,117 @@ body::before {
   <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="mailto:hello@capyrank.com">hello@capyrank.com</a></p>
 </footer>
 
-<script>
+<script type="module">
+import { initializeApp }              from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
+import { getFirestore, collection, query, where, orderBy, limit, getDocs, getCountFromServer }
+  from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
+
 // ============================================================
-//  PLACEHOLDER DATA — replace with Firebase reads later
+//  FIREBASE INIT
 // ============================================================
-const DEMO_DATA = {
-  cub: [
-    { name: 'valonvn',      capys: 312, live: true,  followers: 84  },
-    { name: 'streamerfox',  capys: 287, live: false, followers: 67  },
-    { name: 'noodlestream', capys: 201, live: true,  followers: 42  },
-    { name: 'pixelwitch',   capys: 188, live: false, followers: 91  },
-    { name: 'cozycastle',   capys: 134, live: false, followers: 55  },
-    { name: 'lobstercam',   capys: 98,  live: true,  followers: 30  },
-    { name: 'quietgarden',  capys: 77,  live: false, followers: 22  },
-    { name: 'driftwood_tv', capys: 44,  live: false, followers: 8   },
-  ],
-  capy: [
-    { name: 'heronest',     capys: 540, live: true,  followers: 210 },
-    { name: 'bramblecast',  capys: 499, live: false, followers: 185 },
-    { name: 'softcircuit',  capys: 322, live: true,  followers: 145 },
-  ],
-  crew:    [],
-  colony:  [],
-  kingdom: [],
-  all:     [],
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
+  authDomain:        "capyrank-d8779.firebaseapp.com",
+  projectId:         "capyrank-d8779",
+  storageBucket:     "capyrank-d8779.firebasestorage.app",
+  messagingSenderId: "1038634831025",
+  appId:             "1:1038634831025:web:44801e37a6ac593b336690"
 };
 
-// Flatten all for "all" tab
-DEMO_DATA.all = Object.entries(DEMO_DATA)
-  .filter(([k]) => k !== 'all')
-  .flatMap(([, v]) => v)
-  .sort((a, b) => b.capys - a.capys);
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
 // ============================================================
-//  STATS (placeholder)
+//  LEAGUE CONFIG
 // ============================================================
-document.getElementById('stat-streamers').textContent   = '—';
-document.getElementById('stat-capys').textContent       = '—';
-document.getElementById('stat-communities').textContent = '—';
+const LEAGUE_RANGES = {
+  cub:     [0,    100],
+  capy:    [101,  300],
+  crew:    [301,  750],
+  colony:  [751,  2000],
+  kingdom: [2001, Infinity],
+  all:     null,
+};
 
-// Animate stats in once Firebase is wired — for now just show dashes
-// animateStat('stat-streamers', 0, 128, 1200);
+// Which Firestore field to sort by per time filter
+const TIME_FIELD = {
+  today:   'capys_today',
+  week:    'capys_this_week',
+  month:   'capys_this_month',
+  alltime: 'capys_total',
+};
 
 // ============================================================
-//  LEADERBOARD RENDER
+//  STATE
 // ============================================================
 let activeLeague = 'cub';
 let activeTime   = 'week';
 
-function renderLeaderboard() {
-  const lb   = document.getElementById('leaderboard');
-  const data = DEMO_DATA[activeLeague] || [];
+// ============================================================
+//  FETCH LEADERBOARD FROM FIRESTORE
+// ============================================================
+async function fetchLeaderboard(league, time) {
+  const field  = TIME_FIELD[time] || 'capys_this_week';
+  const range  = LEAGUE_RANGES[league];
+  const ref    = collection(db, 'streamers');
+
+  let q;
+  if (range) {
+    q = query(ref,
+      where('followers', '>=', range[0]),
+      where('followers', '<=', range[1] === Infinity ? 9999999 : range[1]),
+      orderBy('followers'),
+      orderBy(field, 'desc'),
+      limit(25)
+    );
+  } else {
+    // "all" — no follower filter
+    q = query(ref, orderBy(field, 'desc'), limit(25));
+  }
+
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ============================================================
+//  FETCH GLOBAL STATS
+// ============================================================
+async function fetchStats() {
+  try {
+    const streamersSnap = await getCountFromServer(collection(db, 'streamers'));
+    const count = streamersSnap.data().count;
+    animateStat('stat-streamers', 0, count, 1000);
+    // capys_today and communities require aggregation — bot writes these to a 'meta/global' doc
+    const metaSnap = await getDocs(query(collection(db, 'meta')));
+    metaSnap.forEach(doc => {
+      if (doc.id === 'global') {
+        const d = doc.data();
+        if (d.capys_today)    animateStat('stat-capys',        0, d.capys_today,    1200);
+        if (d.active_channels) animateStat('stat-communities', 0, d.active_channels, 1400);
+      }
+    });
+  } catch(e) {
+    // Stats unavailable — leave as dashes
+  }
+}
+
+// ============================================================
+//  RENDER LEADERBOARD
+// ============================================================
+async function renderLeaderboard() {
+  const lb    = document.getElementById('leaderboard');
   const empty = document.getElementById('empty-state');
+
+  lb.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dimmer);font-family:\'Nunito\',sans-serif;">Loading…</div>';
+  empty.style.display = 'none';
+
+  let data = [];
+  try {
+    data = await fetchLeaderboard(activeLeague, activeTime);
+  } catch(e) {
+    lb.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dimmer);font-family:\'Nunito\',sans-serif;">Could not load leaderboard.</div>';
+    return;
+  }
 
   lb.innerHTML = '';
 
@@ -829,44 +888,46 @@ function renderLeaderboard() {
     empty.style.display = 'block';
     return;
   }
-  empty.style.display = 'none';
-
-  const max = data[0]?.capys || 1;
 
   data.forEach((s, i) => {
-    const rank = i + 1;
+    const rank      = i + 1;
     const rankClass = rank <= 3 ? ` rank-${rank}` : '';
-    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const medal     = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const field     = TIME_FIELD[activeTime] || 'capys_this_week';
+    const capys     = s[field] ?? s.capys_total ?? 0;
+    const followers = s.followers ?? 0;
+    const live      = s.live ?? false;
 
     const el = document.createElement('a');
     el.className = `entry${rankClass}`;
-    el.href = `/profile/?user=${s.name}`;
+    el.href = `/profile/?user=${encodeURIComponent(s.id)}`;
     el.innerHTML = `
       <div class="entry-rank">${medal}</div>
       <div class="entry-info">
-        <div class="entry-avatar" style="background:${avatarColour(s.name)}; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:rgba(255,255,255,0.8); font-family:'Nunito',sans-serif;">
-          ${s.name[0].toUpperCase()}
+        <div class="entry-avatar" style="background:${avatarColour(s.id)};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:rgba(255,255,255,0.8);font-family:'Nunito',sans-serif;">
+          ${s.avatar_url
+            ? `<img src="${escHtml(s.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">`
+            : escHtml(s.id[0].toUpperCase())}
         </div>
         <div>
           <div class="entry-name">
-            ${s.live ? '<span class="live-dot"></span>' : ''}${escHtml(s.name)}
+            ${live ? '<span class="live-dot"></span>' : ''}${escHtml(s.display_name || s.id)}
           </div>
-          <div class="entry-sub">${s.followers} followers</div>
+          <div class="entry-sub">${followers.toLocaleString()} followers</div>
         </div>
       </div>
       <div class="entry-score">
-        <div class="score-num">${s.capys.toLocaleString()}</div>
+        <div class="score-num">${capys.toLocaleString()}</div>
         <div class="score-label">Capys</div>
       </div>
     `;
 
-    // Stagger animation
     el.style.opacity = '0';
     el.style.transform = 'translateY(8px)';
     setTimeout(() => {
-      el.style.transition = 'opacity 0.25s ease, transform 0.25s ease, background 0.12s, border-color 0.12s, transform 0.12s';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
+      el.style.transition = 'opacity 0.25s ease, transform 0.25s ease, background 0.12s, border-color 0.12s';
+      el.style.opacity    = '1';
+      el.style.transform  = 'translateY(0)';
     }, i * 40);
 
     lb.appendChild(el);
@@ -890,12 +951,12 @@ document.querySelectorAll('.time-btn').forEach(btn => {
     document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeTime = btn.dataset.time;
-    renderLeaderboard(); // will hit Firebase with time param later
+    renderLeaderboard();
   });
 });
 
 // ============================================================
-//  JOIN BUTTONS — placeholder, will trigger Twitch OAuth
+//  JOIN BUTTONS — placeholder for Twitch OAuth
 // ============================================================
 document.getElementById('btn-join-header').addEventListener('click', e => {
   e.preventDefault();
@@ -923,10 +984,24 @@ function avatarColour(name) {
   return AVATAR_COLOURS[h % AVATAR_COLOURS.length];
 }
 
+function animateStat(id, from, to, duration) {
+  const el    = document.getElementById(id);
+  if (!el || to === 0) return;
+  const start = performance.now();
+  function step(now) {
+    const t   = Math.min((now - start) / duration, 1);
+    const val = Math.round(from + (to - from) * (t < 0.5 ? 2*t*t : -1+(4-2*t)*t));
+    el.textContent = val.toLocaleString();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 // ============================================================
 //  INIT
 // ============================================================
 renderLeaderboard();
+fetchStats();
 </script>
 </body>
 </html>
