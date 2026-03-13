@@ -932,4 +932,13 @@ function animateStat(id, to, duration = 800) {
   if (!el || to === 0) { if(el) el.textContent = '0'; return; }
   const start = performance.now();
   function step(now) {
-    const t   = Math.min((now -
+    const t   = Math.min((now - start) / duration, 1);
+    const val = Math.round(to * (t < 0.5 ? 2*t*t : -1+(4-2*t)*t));
+    el.textContent = val.toLocaleString();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>
