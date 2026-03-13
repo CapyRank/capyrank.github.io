@@ -714,6 +714,7 @@ body::before {
         <button class="time-btn" data-time="today">Today</button>
         <button class="time-btn active" data-time="week">This Week</button>
         <button class="time-btn" data-time="month">Month</button>
+        <button class="time-btn" data-time="year">This Year</button>
         <button class="time-btn" data-time="alltime">All Time</button>
       </div>
     </div>
@@ -764,10 +765,10 @@ body::before {
      FOOTER
 ============================================================ -->
 <footer id="footer">
-  <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="mailto:hello@capyrank.com">hello@capyrank.com</a></p>
+  <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#5c34393030331c3f3d2c252e3d3237723f3331"><span class="__cf_email__" data-cfemail="ff979a939390bf9c9e8f868d9e9194d19c9092">[email&#160;protected]</span></a></p>
 </footer>
 
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp }              from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
 import { getFirestore, collection, query, where, orderBy, limit, getDocs, getCountFromServer }
   from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
@@ -804,6 +805,7 @@ const TIME_FIELD = {
   today:   'capys_today',
   week:    'capys_this_week',
   month:   'capys_this_month',
+  year:    'capys_this_year',
   alltime: 'capys_total',
 };
 
@@ -989,16 +991,4 @@ function animateStat(id, from, to, duration) {
     const t   = Math.min((now - start) / duration, 1);
     const val = Math.round(from + (to - from) * (t < 0.5 ? 2*t*t : -1+(4-2*t)*t));
     el.textContent = val.toLocaleString();
-    if (t < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-
-// ============================================================
-//  INIT
-// ============================================================
-renderLeaderboard();
-fetchStats();
-</script>
-</body>
-</html>
+    if (t < 1) requestAnimationFrame(st
