@@ -835,10 +835,10 @@ async function loadTopGivers(streamerId, period) {
 
     renderGivers(givers, field);
   } catch(e) {
-    // Index not ready yet — show empty
-    list.innerHTML = '';
-    empty.style.display = 'block';
-  }
+		console.error('loadTopGivers error:', e.message, e.code);
+		list.innerHTML = '';
+		empty.style.display = 'block';
+	}
 }
 
 function renderGivers(givers, field) {
