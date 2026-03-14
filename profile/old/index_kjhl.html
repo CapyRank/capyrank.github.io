@@ -838,7 +838,7 @@ async function loadTopGivers(streamerId, period) {
 
     renderGivers(givers, field);
   } catch(e) {
-    // Index not ready yet — show empty
+    console.error('loadTopGivers error:', e.message, e.code);
     list.innerHTML = '';
     empty.style.display = 'block';
   }
@@ -980,13 +980,6 @@ async function loadGivenBreakdown(userId) {
 function showNotFound() {
   document.getElementById('loading').style.display   = 'none';
   document.getElementById('not-found').style.display = 'block';
-}
-
-const AVATAR_COLOURS = ['#c87040','#5ab8ca','#8fca5a','#a070e0','#e06050','#f5c842'];
-function avatarColour(name) {
-  let h = 0;
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
-  return AVATAR_COLOURS[h % AVATAR_COLOURS.length];
 }
 
 function escHtml(s) {
