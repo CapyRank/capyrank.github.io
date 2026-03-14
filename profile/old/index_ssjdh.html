@@ -794,7 +794,7 @@ async function loadProfile(username) {
   document.getElementById('profile-content').style.display = 'block';
 
   // Top givers
-  await loadTopGivers(streamerId, 'week');
+  loadTopGivers(streamerId, 'week');
 
   // Also check if this person is a viewer
   await loadViewerSection(username);
