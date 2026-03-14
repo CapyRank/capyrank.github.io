@@ -506,10 +506,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   margin-bottom: 4px;
-  text-decoration: none;
-  transition: background 0.12s, border-color 0.12s;
 }
-.breakdown-entry:hover { background: var(--bg-hover); border-color: var(--border-warm); }
 .be-name {
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
@@ -960,9 +957,8 @@ async function loadGivenBreakdown(userId) {
     }
     snap.docs.forEach(d => {
       const g  = d.data();
-      const el = document.createElement('a');
+      const el = document.createElement('div');
       el.className = 'breakdown-entry';
-      el.href = `/profile/?user=${encodeURIComponent(g.to_streamer_name || '')}`;
       el.innerHTML = `
         <span class="be-name">${escHtml(g.to_streamer_name || '?')}</span>
         <span class="be-score">${(g.total_given_alltime || 0).toLocaleString()} capys</span>
@@ -980,6 +976,13 @@ async function loadGivenBreakdown(userId) {
 function showNotFound() {
   document.getElementById('loading').style.display   = 'none';
   document.getElementById('not-found').style.display = 'block';
+}
+
+const AVATAR_COLOURS = ['#c87040','#5ab8ca','#8fca5a','#a070e0','#e06050','#f5c842'];
+function avatarColour(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return AVATAR_COLOURS[h % AVATAR_COLOURS.length];
 }
 
 function escHtml(s) {
