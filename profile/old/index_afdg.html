@@ -838,7 +838,7 @@ async function loadTopGivers(streamerId, period) {
 
     renderGivers(givers, field);
   } catch(e) {
-    console.error('loadTopGivers error:', e.message, e.code);
+    // Index not ready yet — show empty
     list.innerHTML = '';
     empty.style.display = 'block';
   }
