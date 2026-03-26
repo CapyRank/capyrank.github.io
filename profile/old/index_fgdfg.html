@@ -830,7 +830,6 @@ async function loadTopGivers(streamerId, period) {
     const q    = query(
       collection(db, 'transactions'),
       where('to_streamer_id', '==', streamerId),
-      where(field, '>', 0),
       orderBy(field, 'desc'),
       limit(10)
     );
