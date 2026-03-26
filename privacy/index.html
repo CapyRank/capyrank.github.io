@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — CapyRank</title>
+<meta name="description" content="CapyRank Privacy Policy — how we handle your data.">
+<link rel="icon" type="image/png" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg:           #1c1a17;
+  --bg-card:      #242220;
+  --bg-card-2:    #2a2825;
+  --bg-hover:     #2f2d29;
+  --border:       rgba(255,255,255,0.06);
+  --border-warm:  rgba(210,160,60,0.18);
+  --yellow:       #f5c842;
+  --yellow-glow:  rgba(245,200,66,0.15);
+  --text:         #f0ebe0;
+  --text-dim:     rgba(240,235,224,0.5);
+  --text-dimmer:  rgba(240,235,224,0.28);
+  --radius:       12px;
+  --radius-sm:    8px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── HEADER ── */
+#header-band {
+  background: var(--yellow);
+  position: relative;
+  z-index: 10;
+}
+#header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+#logo-capy {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  object-position: top;
+  position: relative;
+  bottom: -5px;
+  flex-shrink: 0;
+}
+#logo-text {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #1c1a17;
+  letter-spacing: -0.02em;
+}
+#logo-text span { color: rgba(0,0,0,0.45); font-weight: 700; }
+
+.nav-link {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(0,0,0,0.6);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-link:hover { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.85); }
+
+/* ── CONTENT ── */
+#main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+  position: relative;
+  z-index: 1;
+}
+
+#eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--yellow-glow);
+  border: 1px solid var(--border-warm);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--yellow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: -0.025em;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.updated {
+  font-size: 13px;
+  color: var(--text-dimmer);
+  margin-bottom: 48px;
+}
+
+.section {
+  margin-bottom: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  transition: border-color 0.15s;
+}
+.section:hover { border-color: var(--border-warm); }
+
+.section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--yellow);
+  letter-spacing: 0.01em;
+  margin-bottom: 12px;
+}
+
+.section p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+.section p:last-child { margin-bottom: 0; }
+
+.section ul {
+  list-style: none;
+  margin: 8px 0 10px;
+}
+.section ul li {
+  font-size: 14px;
+  color: var(--text-dim);
+  padding: 4px 0 4px 20px;
+  position: relative;
+  line-height: 1.6;
+}
+.section ul li::before {
+  content: '🐾';
+  position: absolute;
+  left: 0;
+  font-size: 11px;
+  top: 6px;
+}
+
+a.inline-link {
+  color: var(--yellow);
+  text-decoration: none;
+  font-weight: 600;
+}
+a.inline-link:hover { text-decoration: underline; }
+
+/* ── FOOTER ── */
+#footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dimmer);
+  position: relative;
+  z-index: 1;
+}
+#footer a { color: var(--text-dim); text-decoration: none; }
+#footer a:hover { color: var(--text); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#main { animation: fade-up 0.5s ease both; }
+
+</style>
+</head>
+<body>
+
+<div id="header-band">
+  <div id="header-inner">
+    <a href="/" id="logo">
+      <img src="../icon.png" alt="CapyRank" id="logo-capy">
+      <div id="logo-text">Capy<span>Rank</span></div>
+    </a>
+    <a href="/" class="nav-link">← Back to Rankings</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <div id="eyebrow">🐾 Legal</div>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: March 2026</p>
+
+  <div class="section">
+    <h2>Overview</h2>
+    <p>CapyRank is a community-voted streamer discovery platform. This policy explains what data we collect, how we use it, and how we protect it. We keep things simple — we collect only what's necessary to run the platform and nothing more.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data We Collect</h2>
+    <p>When a streamer joins CapyRank via Twitch OAuth, we store the following information in our database:</p>
+    <ul>
+      <li>Twitch user ID and username</li>
+      <li>Display name and profile picture URL</li>
+      <li>Follower count (updated periodically)</li>
+      <li>Live status (updated periodically)</li>
+      <li>Capy counts (given and received)</li>
+    </ul>
+    <p>When a viewer gives Capys in chat, we store their Twitch user ID, username, display name, profile picture URL, and a record of how many Capys they've given and to whom.</p>
+    <p>We do not collect email addresses, passwords, payment information, or any sensitive personal data.</p>
+  </div>
+
+  <div class="section">
+    <h2>How We Use Your Data</h2>
+    <p>Data collected is used solely to operate CapyRank:</p>
+    <ul>
+      <li>Displaying streamer profiles and leaderboards on capyrank.com</li>
+      <li>Tracking Capy allocations and supporter rankings</li>
+      <li>Powering the CapyRank Twitch Extension panel</li>
+      <li>Showing viewers how many Capys they have remaining each day</li>
+    </ul>
+    <p>We do not sell, share, or use your data for advertising, analytics, or any purpose other than operating the platform.</p>
+  </div>
+
+  <div class="section">
+    <h2>Twitch Extension</h2>
+    <p>The CapyRank Leaderboard Twitch Extension displays the top supporters for a channel. It reads publicly available CapyRank data from our database. The extension does not collect any personal information from viewers beyond what is already stored as described above. No identity linking or viewer authentication is used.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data Storage</h2>
+    <p>Data is stored in Google Firestore (Firebase), hosted in the United States. Google's privacy practices apply to data stored there. You can review Google's privacy policy at <a class="inline-link" href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data Retention & Deletion</h2>
+    <p>Capy counts reset on a daily, weekly, monthly, and yearly basis as part of normal platform operation. All-time totals are retained indefinitely while a streamer remains registered.</p>
+    <p>If you'd like your data removed from CapyRank, contact us at <a class="inline-link" href="mailto:hello@capyrank.com">hello@capyrank.com</a> and we'll delete your records promptly.</p>
+  </div>
+
+  <div class="section">
+    <h2>Third-Party Services</h2>
+    <p>CapyRank uses the following third-party services:</p>
+    <ul>
+      <li>Twitch API — for authentication and user data</li>
+      <li>Google Firestore — for data storage</li>
+      <li>Cloudflare — for DNS, SSL, and the join flow</li>
+      <li>GitHub Pages — for hosting the website</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Contact</h2>
+    <p>If you have any questions about this privacy policy or how your data is handled, contact us at <a class="inline-link" href="mailto:hello@capyrank.com">hello@capyrank.com</a>.</p>
+  </div>
+
+</main>
+
+<footer id="footer">
+  <p>🐾 CapyRank — <a href="/">Back to Rankings</a> &nbsp;·&nbsp; <a href="mailto:hello@capyrank.com">hello@capyrank.com</a></p>
+</footer>
+
+</body>
+</html>
