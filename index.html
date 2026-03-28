@@ -843,20 +843,30 @@ async function fetchLeaderboard(league, time) {
 
   let q;
   if (range) {
+    // Fetch streamers in follower range — Firestore requires orderBy('followers') first
+    // when using inequality filters on followers. Sort by capys client-side instead.
     q = query(ref,
       where('followers', '>=', range[0]),
       where('followers', '<=', range[1] === Infinity ? 9999999 : range[1]),
       orderBy('followers'),
+      limit(200)
+    );
+    const snap = await getDocs(q);
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => (s[field] || 0) > 0)
+      .sort((a, b) => (b[field] || 0) - (a[field] || 0))
+      .slice(0, 25);
+  } else {
+    // "all" — no follower filter, only show streamers with capys
+    q = query(ref,
+      where(field, '>', 0),
       orderBy(field, 'desc'),
       limit(25)
     );
-  } else {
-    // "all" — no follower filter
-    q = query(ref, orderBy(field, 'desc'), limit(25));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
-
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
 // ============================================================
