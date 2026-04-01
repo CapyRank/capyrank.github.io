@@ -601,7 +601,7 @@ body::before {
       </div>
       <div id="profile-meta">
         <div id="profile-name">—</div>
-        <div id="profile-league">Capy Cub</div>
+        <div id="profile-league">Tier I</div>
         <div id="profile-followers">— followers</div>
         <a id="twitch-link" href="#" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
@@ -702,15 +702,15 @@ const db  = getFirestore(app);
 //  LEAGUE HELPER
 // ============================================================
 const LEAGUES = [
-  { name: 'Capy Cub',    min: 0,    max: 100    },
-  { name: 'Capy',        min: 101,  max: 300    },
-  { name: 'Capy Crew',   min: 301,  max: 750    },
-  { name: 'Capy Colony', min: 751,  max: 2000   },
-  { name: 'Capy Kingdom',min: 2001, max: Infinity},
+  { name: 'Tier I',    min: 0,    max: 100    },
+  { name: 'Tier II',        min: 101,  max: 300    },
+  { name: 'Tier III',   min: 301,  max: 750    },
+  { name: 'Tier IV', min: 751,  max: 2000   },
+  { name: 'Tier V',min: 2001, max: Infinity},
 ];
 
 function getLeague(followers) {
-  return LEAGUES.find(l => followers >= l.min && followers <= l.max)?.name ?? 'Capy Cub 🌱';
+  return LEAGUES.find(l => followers >= l.min && followers <= l.max)?.name ?? 'Tier I';
 }
 
 // ============================================================
@@ -830,7 +830,6 @@ async function loadTopGivers(streamerId, period) {
     const q    = query(
       collection(db, 'transactions'),
       where('to_streamer_id', '==', streamerId),
-      where(field, '>', 0),
       orderBy(field, 'desc'),
       limit(10)
     );
