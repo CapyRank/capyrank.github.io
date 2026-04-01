@@ -816,7 +816,6 @@ body::before {
     🐾 Join CapyRank
   </a>
   <a href="#leaderboard-section" class="btn-secondary">See the rankings</a>
-  <button class="btn-secondary" id="btn-random-capy" onclick="goRandomCapy()">🎲 Random Capy</button>
 </section>
 
 <!-- ============================================================
@@ -1213,31 +1212,10 @@ function renderNewestStrip(streamers) {
   }).join('');
 }
 
-// ============================================================
-//  RANDOM CAPY
-// ============================================================
-async function goRandomCapy() {
-  const btn = document.getElementById('btn-random-capy');
-  if (btn) { btn.textContent = '🐾 Finding...'; btn.disabled = true; }
-
-  try {
-    const snap = await getDocs(collection(db, 'streamers'));
-    const ids   = snap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(s => s.id !== '1458883661' && s.username);
-
-    if (!ids.length) return;
-
-    const pick = ids[Math.floor(Math.random() * ids.length)];
-    window.location.href = `/profile/?user=${encodeURIComponent(pick.username)}`;
-  } catch(e) {
-    if (btn) { btn.textContent = '🎲 Random Capy'; btn.disabled = false; }
-  }
-}
-
 // Init
 fetchStats();
 renderLeaderboard();
+document.getElementById('btn-random-capy').addEventListener('click', goRandomCapy);
 fetchNewestCapys();
 </script>
 </body>
