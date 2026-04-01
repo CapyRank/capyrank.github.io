@@ -556,6 +556,134 @@ body::before {
   #profile-avatar { width: 72px; height: 72px; font-size: 28px; }
 }
 
+
+/* ============================================================
+   MOTTO
+============================================================ */
+#profile-motto {
+  display: none;
+  font-size: 13px;
+  color: var(--text-dimmer);
+  font-style: italic;
+  margin-top: 6px;
+}
+#profile-motto::before { content: '"'; color: var(--yellow); }
+#profile-motto::after  { content: '"'; color: var(--yellow); }
+
+/* ============================================================
+   LAST GAME
+============================================================ */
+#last-game-section {
+  margin-bottom: 32px;
+  display: none;
+  animation: fade-up 0.4s ease 0.1s both;
+}
+#last-game-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+#last-game-section h2 span { color: var(--yellow); }
+
+#last-game-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  transition: border-color 0.15s;
+}
+#last-game-card:hover { border-color: var(--border-warm); }
+
+#last-game-art {
+  width: 48px;
+  height: 64px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-hover);
+}
+
+#last-game-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text);
+}
+#last-game-label {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   CLIPS
+============================================================ */
+#clips-section {
+  margin-bottom: 32px;
+  display: none;
+  animation: fade-up 0.4s ease 0.16s both;
+}
+#clips-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+#clips-section h2 span { color: var(--yellow); }
+
+#clips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.clip-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.clip-card:hover {
+  border-color: var(--border-warm);
+  transform: translateY(-2px);
+}
+
+.clip-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  background: var(--bg-hover);
+}
+
+.clip-info {
+  padding: 10px 12px;
+}
+.clip-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.clip-meta {
+  font-size: 11px;
+  color: var(--text-dimmer);
+}
 </style>
 </head>
 <body>
@@ -603,6 +731,7 @@ body::before {
         <div id="profile-name">—</div>
         <div id="profile-league">Tier I</div>
         <div id="profile-followers">— followers</div>
+        <div id="profile-motto"></div>
         <a id="twitch-link" href="#" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
           Watch on Twitch
@@ -632,6 +761,24 @@ body::before {
         <div class="sc-num" id="sc-year">—</div>
         <div class="sc-label">This Year</div>
       </div>
+    </div>
+
+    <!-- LAST GAME -->
+    <div id="last-game-section">
+      <h2>Last <span>Played</span></h2>
+      <div id="last-game-card">
+        <img id="last-game-art" src="" alt="">
+        <div>
+          <div id="last-game-name">—</div>
+          <div id="last-game-label">Last streamed category</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIPS -->
+    <div id="clips-section">
+      <h2>Recent <span>Clips</span></h2>
+      <div id="clips-grid"></div>
     </div>
 
     <!-- TOP GIVERS -->
@@ -791,6 +938,43 @@ async function loadProfile(username) {
   animateStat('sc-week',  data.capys_this_week    || 0);
   animateStat('sc-month', data.capys_this_month   || 0);
   animateStat('sc-year',  data.capys_this_year    || 0);
+
+  // Motto
+  const mottoEl = document.getElementById('profile-motto');
+  if (data.motto) {
+    mottoEl.textContent = data.motto;
+    mottoEl.style.display = 'block';
+  }
+
+  // Last game
+  if (data.last_game) {
+    const gameSection = document.getElementById('last-game-section');
+    const gameArt     = document.getElementById('last-game-art');
+    const gameName    = document.getElementById('last-game-name');
+    gameName.textContent = data.last_game;
+    if (data.last_game_id && data.last_game_id !== '0') {
+      gameArt.src = `https://static-cdn.jtvnw.net/ttv-boxart/${encodeURIComponent(data.last_game_id)}-52x72.jpg`;
+      gameArt.style.display = 'block';
+    } else {
+      gameArt.style.display = 'none';
+    }
+    gameSection.style.display = 'block';
+  }
+
+  // Clips
+  if (data.clips && data.clips.length) {
+    const clipsSection = document.getElementById('clips-section');
+    const clipsGrid    = document.getElementById('clips-grid');
+    clipsGrid.innerHTML = data.clips.map(c => `
+      <a class="clip-card" href="${escHtml(c.url)}" target="_blank" rel="noopener">
+        <img class="clip-thumb" src="${escHtml(c.thumbnail_url)}" alt="${escHtml(c.title)}" loading="lazy">
+        <div class="clip-info">
+          <div class="clip-title">${escHtml(c.title)}</div>
+          <div class="clip-meta">${Number(c.view_count || 0).toLocaleString()} views · ${Math.round(c.duration || 0)}s</div>
+        </div>
+      </a>`).join('');
+    clipsSection.style.display = 'block';
+  }
 
   // Show content
   document.getElementById('loading').style.display         = 'none';
