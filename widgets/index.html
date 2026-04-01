@@ -314,13 +314,57 @@ footer a:hover { color: var(--text); }
     </div>
   </div>
 
-  <!-- STREAM OVERLAY — COMING SOON -->
+  <!-- STREAM OVERLAY -->
   <div class="widget-section">
     <div class="widget-section-title">Stream Overlay</div>
-    <div class="coming-soon-card">
-      <div class="cs-icon">🐾</div>
-      <div class="cs-title">Capy Alert Overlay — Coming Soon</div>
-      <div class="cs-body">A browser source overlay for OBS that shows an animation whenever your viewers give Capys. Add it to your stream and let your community know their support is being seen.</div>
+    <div class="panel-card" style="max-width:640px;">
+      <div class="panel-preview" style="padding:0;background:var(--bg-card-2);">
+        <img src="overlay_reference.png" alt="CapyRank alert overlay preview" style="width:100%;max-width:100%;border-radius:0;">
+      </div>
+      <div style="padding:20px 22px 24px;">
+        <div class="panel-label" style="font-size:16px;margin-bottom:6px;">Capy Alert Overlay</div>
+        <div class="panel-meta" style="font-size:13px;margin-bottom:20px;line-height:1.6;">A browser source for OBS that shows a notification whenever your viewers give Capys. Transparent background — drag it anywhere on your scene.</div>
+
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input
+            id="overlay-username"
+            type="text"
+            placeholder="Your Twitch username"
+            style="
+              flex:1;
+              min-width:180px;
+              background:var(--bg);
+              border:1px solid var(--border);
+              border-radius:20px;
+              padding:9px 16px;
+              font-family:'Nunito Sans',sans-serif;
+              font-size:14px;
+              color:var(--text);
+              outline:none;
+              transition:border-color 0.15s;
+            "
+            onfocus="this.style.borderColor='var(--yellow)'"
+            onblur="this.style.borderColor='var(--border)'"
+          >
+          <button
+            id="overlay-copy-btn"
+            class="btn-download"
+            onclick="copyOverlayUrl()"
+            style="white-space:nowrap;"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy URL
+          </button>
+        </div>
+
+        <div id="overlay-url-preview" style="margin-top:10px;font-size:12px;color:var(--text-dimmer);font-family:monospace;display:none;"></div>
+        <div id="overlay-copied-msg" style="margin-top:8px;font-size:12px;color:var(--yellow);display:none;font-family:'Nunito',sans-serif;font-weight:700;">✓ Copied to clipboard!</div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dimmer);line-height:1.7;">
+          <strong style="color:var(--text-dim);">How to add in OBS:</strong><br>
+          Sources → Add → Browser Source → paste the URL → set width/height to match your canvas (e.g. 1920×1080) → check <em>Transparent background</em>.
+        </div>
+      </div>
     </div>
   </div>
 
@@ -330,5 +374,51 @@ footer a:hover { color: var(--text); }
   <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras.</p>
 </footer>
 
+
+<script>
+function copyOverlayUrl() {
+  const username = document.getElementById('overlay-username').value.trim().toLowerCase();
+  const btn      = document.getElementById('overlay-copy-btn');
+  const preview  = document.getElementById('overlay-url-preview');
+  const msg      = document.getElementById('overlay-copied-msg');
+
+  if (!username) {
+    document.getElementById('overlay-username').focus();
+    document.getElementById('overlay-username').style.borderColor = 'var(--yellow)';
+    return;
+  }
+
+  const url = 'https://capyrank.com/widgets/overlay/?user=' + encodeURIComponent(username);
+
+  preview.textContent = url;
+  preview.style.display = 'block';
+
+  navigator.clipboard.writeText(url).then(() => {
+    msg.style.display = 'block';
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => {
+      msg.style.display = 'none';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy URL';
+    }, 2500);
+  });
+}
+
+// Live preview as they type
+document.addEventListener('DOMContentLoaded', () => {
+  const input   = document.getElementById('overlay-username');
+  const preview = document.getElementById('overlay-url-preview');
+  if (input) {
+    input.addEventListener('input', () => {
+      const u = input.value.trim().toLowerCase();
+      if (u) {
+        preview.textContent = 'https://capyrank.com/widgets/overlay/?user=' + encodeURIComponent(u);
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>
