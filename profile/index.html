@@ -965,7 +965,7 @@ async function loadProfile(username) {
   if (data.clips && data.clips.length) {
     const clipsSection = document.getElementById('clips-section');
     const clipsGrid    = document.getElementById('clips-grid');
-    clipsGrid.innerHTML = data.clips.map(c => `
+    clipsGrid.innerHTML = data.clips.slice(0, 4).map(c => `
       <a class="clip-card" href="${escHtml(c.url)}" target="_blank" rel="noopener">
         <img class="clip-thumb" src="${escHtml(c.thumbnail_url)}" alt="${escHtml(c.title)}" loading="lazy">
         <div class="clip-info">
