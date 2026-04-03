@@ -778,6 +778,117 @@ body::before {
   padding: 1px 5px;
 }
 
+
+/* ============================================================
+   LIVE TOASTS
+============================================================ */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-warm);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  min-width: 260px;
+  max-width: 340px;
+  pointer-events: all;
+  cursor: pointer;
+  transform: translateX(calc(100% + 40px));
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s ease;
+}
+.toast.toast-show {
+  transform: translateX(0);
+  opacity: 1;
+}
+.toast.toast-hide {
+  transform: translateX(calc(100% + 40px));
+  opacity: 0;
+  transition: transform 0.28s ease, opacity 0.22s ease;
+}
+.toast:hover {
+  border-color: rgba(245,200,66,0.4);
+  background: var(--bg-hover);
+}
+
+.toast-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--bg-card-2);
+  border: 1.5px solid var(--border-warm);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--yellow);
+}
+.toast-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+}
+.toast-line {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toast-line strong {
+  color: var(--text);
+  font-weight: 800;
+}
+.toast-amount {
+  color: var(--yellow);
+  font-weight: 800;
+}
+.toast-sub {
+  font-size: 11px;
+  color: var(--text-dimmer);
+  margin-top: 2px;
+  font-family: 'Nunito Sans', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+  #toast-container {
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+  }
+  .toast {
+    max-width: 100%;
+    min-width: unset;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -929,6 +1040,11 @@ body::before {
 </section>
 
 <!-- ============================================================
+     LIVE TOAST CONTAINER
+============================================================ -->
+<div id="toast-container" aria-live="polite" aria-label="Live activity"></div>
+
+<!-- ============================================================
      FOOTER
 ============================================================ -->
 <footer id="footer">
@@ -937,7 +1053,7 @@ body::before {
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp }              from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
-import { getFirestore, collection, query, where, orderBy, limit, getDocs, getCountFromServer }
+import { getFirestore, collection, query, where, orderBy, limit, getDocs, getCountFromServer, onSnapshot, doc }
   from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
 
 // ============================================================
@@ -1213,6 +1329,128 @@ function renderNewestStrip(streamers) {
 }
 
 // ============================================================
+//  LIVE TOASTS
+// ============================================================
+const TOAST_QUEUE_THRESHOLD = 3;   // pending queue depth before busy mode kicks in
+const TOAST_BUSY_MIN_CAPYS  = 5;   // min capys required to show a toast in busy mode
+const MAX_VISIBLE_TOASTS    = 2;   // max toasts visible simultaneously
+const TOAST_DURATION_MS     = 5000;
+
+const toastQueue     = [];
+let   toastsVisible  = 0;
+const toastContainer = document.getElementById('toast-container');
+
+function maybeEnqueueToast(data) {
+  // Quiet mode: show everything. Busy mode: only notable gifts.
+  if (toastQueue.length < TOAST_QUEUE_THRESHOLD || data.amount >= TOAST_BUSY_MIN_CAPYS) {
+    toastQueue.push(data);
+    drainToastQueue();
+  }
+}
+
+function drainToastQueue() {
+  while (toastsVisible < MAX_VISIBLE_TOASTS && toastQueue.length) {
+    showToast(toastQueue.shift());
+  }
+}
+
+function showToast({ giverName, giverAvatar, streamerName, amount }) {
+  toastsVisible++;
+  const plural = amount === 1 ? 'capy' : 'capys';
+
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('role', 'status');
+
+  const avatarInner = giverAvatar
+    ? `<img src="${escHtml(giverAvatar)}" alt="" onerror="this.style.display='none'">`
+    : escHtml((giverName[0] || '?').toUpperCase());
+
+  el.innerHTML = `
+    <div class="toast-avatar">${avatarInner}</div>
+    <div class="toast-body">
+      <div class="toast-line">
+        <strong>${escHtml(giverName)}</strong> gave
+        <span class="toast-amount">${amount.toLocaleString()} ${plural}</span>
+      </div>
+      <div class="toast-sub">🐾 to ${escHtml(streamerName)}</div>
+    </div>
+  `;
+
+  el.addEventListener('click', () => {
+    window.location.href = `/profile/?user=${encodeURIComponent(streamerName)}`;
+  });
+
+  toastContainer.appendChild(el);
+
+  // Double-rAF ensures the initial off-screen state is painted before we add the class
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('toast-show')));
+
+  // Auto-dismiss
+  setTimeout(() => {
+    el.classList.remove('toast-show');
+    el.classList.add('toast-hide');
+    setTimeout(() => {
+      el.remove();
+      toastsVisible--;
+      drainToastQueue();
+    }, 320);
+  }, TOAST_DURATION_MS);
+}
+
+function startLiveToasts() {
+  const txRef     = collection(db, 'transactions');
+  let   initialLoad = true;
+  const lastSeen  = {};
+
+  onSnapshot(txRef, (snap) => {
+    // On first snapshot, just record baselines — don't toast for existing data
+    if (initialLoad) {
+      snap.docs.forEach(d => { lastSeen[d.id] = d.data().given_today || 0; });
+      initialLoad = false;
+      return;
+    }
+
+    snap.docChanges().forEach(change => {
+      if (change.type !== 'added' && change.type !== 'modified') return;
+
+      const data    = change.doc.data();
+      const prev    = lastSeen[change.doc.id] ?? 0;
+      const current = data.given_today || 0;
+      const diff    = current - prev;
+
+      if (diff > 0) {
+        maybeEnqueueToast({
+          giverName:    data.display_name   || data.from_user         || '?',
+          giverAvatar:  data.avatar_url     || '',
+          streamerName: data.to_streamer_name || data.to_streamer_id  || '?',
+          amount: diff,
+        });
+      }
+
+      lastSeen[change.doc.id] = current;
+    });
+  });
+}
+
+// ============================================================
+//  LIVE STAT COUNTERS  (re-animate when meta/global updates)
+// ============================================================
+function startLiveStats() {
+  const metaRef  = doc(db, 'meta', 'global');
+  let   firstSnap = true;
+
+  onSnapshot(metaRef, (snap) => {
+    if (!snap.exists()) return;
+    // Skip the very first snapshot — fetchStats() already handled the initial load
+    if (firstSnap) { firstSnap = false; return; }
+    const d = snap.data();
+    if (d.capys_today)   animateStat('stat-capys',   0, d.capys_today,   800);
+    if (d.capys_alltime) animateStat('stat-alltime', 0, d.capys_alltime, 800);
+  });
+}
+
+// ============================================================
 //  RANDOM CAPY
 // ============================================================
 async function goRandomCapy() {
@@ -1234,6 +1472,8 @@ async function goRandomCapy() {
 // Init
 fetchStats();
 renderLeaderboard();
+startLiveToasts();
+startLiveStats();
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-random-capy');
   if (btn) btn.addEventListener('click', goRandomCapy);
