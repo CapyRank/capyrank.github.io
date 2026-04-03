@@ -1033,6 +1033,9 @@ function renderGivers(givers, field) {
   const empty = document.getElementById('givers-empty');
   list.innerHTML = '';
 
+  // Only show givers who have actually contributed in the selected period
+  givers = givers.filter(g => (g[field] ?? 0) > 0);
+
   if (givers.length === 0) {
     empty.style.display = 'block';
     return;
