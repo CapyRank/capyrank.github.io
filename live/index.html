@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Now — CapyRank</title>
+<meta name="description" content="See which CapyRank streamers are live right now. Filter and sort The Herd by name, followers, or capys earned.">
+<link rel="icon" type="image/png" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   TOKENS
+============================================================ */
+:root {
+  --bg:           #1c1a17;
+  --bg-card:      #242220;
+  --bg-card-2:    #2a2825;
+  --bg-hover:     #2f2d29;
+  --border:       rgba(255,255,255,0.06);
+  --border-warm:  rgba(210,160,60,0.18);
+
+  --yellow:       #f5c842;
+  --yellow-dim:   #c8a030;
+  --yellow-glow:  rgba(245,200,66,0.15);
+  --amber:        #e8a020;
+
+  --text:         #f0ebe0;
+  --text-dim:     rgba(240,235,224,0.5);
+  --text-dimmer:  rgba(240,235,224,0.28);
+
+  --green:        #4cca6a;
+
+  --capy-1: #f5c842;
+  --capy-2: #8fca5a;
+  --capy-3: #5ab8ca;
+  --capy-4: #a070e0;
+  --capy-5: #e06050;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+/* ============================================================
+   RESET & BASE
+============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+#header-band {
+  background: var(--yellow);
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+#header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+#logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  position: relative;
+  z-index: 20;
+}
+#logo-capy {
+  width: 80px; height: 80px;
+  object-fit: cover; object-position: top;
+  position: relative; bottom: -5px;
+  flex-shrink: 0;
+}
+#logo-text {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900; font-size: 22px;
+  color: #1c1a17; letter-spacing: -0.02em; line-height: 1;
+}
+#logo-text span { color: rgba(0,0,0,0.45); font-weight: 700; }
+
+#header-nav { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 13px;
+  color: rgba(0,0,0,0.6);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.01em;
+}
+.nav-link:hover { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.85); }
+.nav-link.active {
+  background: rgba(0,0,0,0.12);
+  color: rgba(0,0,0,0.85);
+}
+.btn-join {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 13px;
+  color: #fff; background: #1c1a17;
+  border: none; padding: 8px 20px;
+  border-radius: 20px; cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.15s, transform 0.1s;
+  text-decoration: none; display: inline-block;
+}
+.btn-join:hover { background: #2f2d29; transform: translateY(-1px); }
+.nav-discord {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px;
+  color: black; transition: color 0.15s, background 0.15s;
+}
+.nav-discord:hover { color: rgba(0,0,0,0.7); background: rgba(0,0,0,0.08); }
+.nav-discord svg { width: 20px; height: 20px; }
+
+/* ============================================================
+   HERO
+============================================================ */
+#hero {
+  position: relative; z-index: 1;
+  padding: 56px 24px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+#live-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(76,202,106,0.1);
+  border: 1px solid rgba(76,202,106,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 12px;
+  color: var(--green);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.eyebrow-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: eyebrow-pulse 2s ease-in-out infinite;
+}
+@keyframes eyebrow-pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+#hero h1 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+#hero h1 em { font-style: normal; color: var(--yellow); }
+
+#hero-sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+#live-count-text {
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ============================================================
+   SORT CONTROLS
+============================================================ */
+#controls {
+  position: relative; z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#sort-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dimmer);
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.sort-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sort-btn:hover { border-color: rgba(255,255,255,0.12); color: var(--text); }
+.sort-btn.active {
+  background: var(--text);
+  border-color: transparent;
+  color: #1c1a17;
+  font-weight: 800;
+}
+.sort-btn svg { width: 11px; height: 11px; opacity: 0.6; }
+
+/* Period tabs — shown only when sorting by capys */
+#period-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding-left: 2px;
+}
+#period-row.hidden { display: none; }
+
+.period-btn {
+  padding: 5px 13px;
+  border-radius: 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-dimmer);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.period-btn:hover { color: var(--text-dim); }
+.period-btn.active {
+  background: var(--bg-card-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* ============================================================
+   LIVE GRID
+============================================================ */
+#main {
+  position: relative; z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+#live-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+/* ── Streamer card ── */
+.live-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+  overflow: hidden;
+  animation: card-in 0.25s ease both;
+}
+.live-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-warm);
+  transform: translateY(-2px);
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Tier accent bar at top of card */
+.card-tier-bar {
+  height: 3px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.card-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+/* Top row: avatar + name/meta + live badge */
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  position: relative;
+}
+.card-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+.card-info { flex: 1; min-width: 0; }
+.card-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 15px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.card-meta {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-tier-badge {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1px solid currentColor;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* Live pill */
+.card-live-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(76,202,106,0.12);
+  border: 1px solid rgba(76,202,106,0.25);
+  border-radius: 12px;
+  padding: 3px 9px;
+  flex-shrink: 0;
+}
+.card-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: live-pulse 2s ease-in-out infinite;
+}
+@keyframes live-pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.card-live-text {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+/* Bottom row: capy score */
+.card-score {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.card-score-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900; font-size: 22px;
+  color: var(--yellow);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.card-score-label {
+  font-size: 12px;
+  color: var(--text-dimmer);
+}
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+#empty-state {
+  display: none;
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-dimmer);
+}
+#empty-state .empty-icon { font-size: 52px; margin-bottom: 16px; }
+#empty-state h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900; font-size: 22px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+#empty-state p { font-size: 14px; color: var(--text-dimmer); line-height: 1.7; }
+#empty-state a { color: var(--yellow); text-decoration: none; }
+#empty-state a:hover { text-decoration: underline; }
+
+/* Loading */
+#loading {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-dimmer);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+#footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dimmer);
+  position: relative; z-index: 1;
+}
+#footer a { color: var(--text-dim); text-decoration: none; }
+#footer a:hover { color: var(--text); }
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#hero     { animation: fade-up 0.45s ease both; }
+#controls { animation: fade-up 0.45s ease 0.08s both; }
+#main     { animation: fade-up 0.45s ease 0.14s both; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 600px) {
+  #hero { padding: 40px 20px 28px; }
+  #controls { padding: 0 20px 24px; }
+  #main { padding: 0 20px 60px; }
+  #live-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<div id="header-band">
+  <div id="header-inner">
+    <a href="/" id="logo">
+      <img src="../icon.png" alt="CapyRank" id="logo-capy">
+      <div id="logo-text">Capy<span>Rank</span></div>
+    </a>
+    <nav id="header-nav">
+      <a href="/faq/" class="nav-link">FAQ</a>
+      <a href="/widgets/" class="nav-link">Widgets</a>
+      <a href="/live/" class="nav-link active">Live</a>
+      <a href="#" class="nav-discord" title="CapyRank Discord — coming soon" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      </a>
+      <a href="https://capyrank.com/join" class="btn-join">Join CapyRank</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <div id="live-eyebrow">
+    <span class="eyebrow-dot"></span> Updated live
+  </div>
+  <h1>The <em>Herd</em> — Live Now</h1>
+  <p id="hero-sub">
+    <span id="live-count-text">—</span> streaming right now.
+    Sort by who's climbing fastest, or just browse.
+  </p>
+</section>
+
+<!-- ============================================================
+     SORT CONTROLS
+============================================================ -->
+<div id="controls">
+  <div id="sort-row">
+    <span class="sort-label">Sort by</span>
+    <button class="sort-btn" data-sort="capys" id="sort-capys">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Capys
+    </button>
+    <button class="sort-btn" data-sort="followers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Followers
+    </button>
+    <button class="sort-btn" data-sort="name">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+      Name
+    </button>
+  </div>
+
+  <div id="period-row">
+    <button class="period-btn active" data-period="today">Today</button>
+    <button class="period-btn" data-period="week">This Week</button>
+    <button class="period-btn" data-period="month">This Month</button>
+    <button class="period-btn" data-period="year">This Year</button>
+    <button class="period-btn" data-period="alltime">All Time</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+<main id="main">
+  <div id="loading">Loading The Herd…</div>
+  <div id="live-grid"></div>
+  <div id="empty-state">
+    <div class="empty-icon">🐾</div>
+    <h2>The Herd is resting</h2>
+    <p>Nobody from The Herd is live right now — check back soon.<br>
+    In the meantime, <a href="/">browse the full rankings</a>.</p>
+  </div>
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer id="footer">
+  <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="mailto:hello@capyrank.com">hello@capyrank.com</a></p>
+</footer>
+
+<script type="module">
+import { initializeApp }   from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
+import { getFirestore, collection, query, where, onSnapshot }
+  from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
+  authDomain:        "capyrank-d8779.firebaseapp.com",
+  projectId:         "capyrank-d8779",
+  storageBucket:     "capyrank-d8779.firebasestorage.app",
+  messagingSenderId: "1038634831025",
+  appId:             "1:1038634831025:web:44801e37a6ac593b336690"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── Config ────────────────────────────────────────────────────
+const PERIOD_FIELDS = {
+  today:   'capys_today',
+  week:    'capys_this_week',
+  month:   'capys_this_month',
+  year:    'capys_this_year',
+  alltime: 'capys_total',
+};
+const PERIOD_LABELS = {
+  today:   'capys today',
+  week:    'capys this week',
+  month:   'capys this month',
+  year:    'capys this year',
+  alltime: 'capys all time',
+};
+const TIERS = {
+  cub:     { name: 'Capy Cub',     color: '#f5c842' },
+  capy:    { name: 'Capy',         color: '#8fca5a' },
+  crew:    { name: 'Capy Crew',    color: '#5ab8ca' },
+  colony:  { name: 'Capy Colony',  color: '#a070e0' },
+  kingdom: { name: 'Capy Kingdom', color: '#e06050' },
+};
+
+function getTier(followers) {
+  if ((followers || 0) <= 100)  return 'cub';
+  if ((followers || 0) <= 300)  return 'capy';
+  if ((followers || 0) <= 750)  return 'crew';
+  if ((followers || 0) <= 2000) return 'colony';
+  return 'kingdom';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── State ─────────────────────────────────────────────────────
+let sortBy     = 'capys';
+let sortPeriod = 'today';
+let liveData   = [];
+let firstLoad  = true;
+
+// ── Sort ──────────────────────────────────────────────────────
+function sorted() {
+  const copy = [...liveData];
+  switch (sortBy) {
+    case 'name':
+      return copy.sort((a, b) =>
+        (a.display_name || a.username || '').toLowerCase()
+          .localeCompare((b.display_name || b.username || '').toLowerCase()));
+    case 'followers':
+      return copy.sort((a, b) => (b.followers || 0) - (a.followers || 0));
+    case 'capys':
+    default:
+      return copy.sort((a, b) =>
+        (b[PERIOD_FIELDS[sortPeriod]] || 0) - (a[PERIOD_FIELDS[sortPeriod]] || 0));
+  }
+}
+
+// ── Render ────────────────────────────────────────────────────
+function render() {
+  const grid    = document.getElementById('live-grid');
+  const empty   = document.getElementById('empty-state');
+  const loading = document.getElementById('loading');
+  const countEl = document.getElementById('live-count-text');
+
+  loading.style.display = 'none';
+
+  const data = sorted();
+
+  // Update hero count
+  const n = data.length;
+  countEl.textContent = n === 0
+    ? 'Nobody from The Herd is live'
+    : `${n} ${n === 1 ? 'streamer' : 'streamers'} from The Herd`;
+
+  if (data.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const field     = PERIOD_FIELDS[sortPeriod] || 'capys_today';
+  const scoreLabel = PERIOD_LABELS[sortPeriod] || 'capys today';
+
+  grid.innerHTML = data.map((s, i) => {
+    const tier      = getTier(s.followers);
+    const tierInfo  = TIERS[tier];
+    const capys     = (s[field] || 0).toLocaleString();
+    const followers = (s.followers || 0).toLocaleString();
+    const username  = escHtml(s.username || s.id);
+    const name      = escHtml(s.display_name || s.username || s.id);
+
+    const avatarContent = s.avatar_url
+      ? `<img src="${escHtml(s.avatar_url)}" alt="" loading="lazy">`
+      : escHtml((s.display_name || s.username || '?')[0].toUpperCase());
+
+    return `
+      <a class="live-card" href="/profile/?user=${encodeURIComponent(s.username || s.id)}"
+         style="animation-delay:${i * 35}ms">
+        <div class="card-tier-bar" style="background:${tierInfo.color};"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-avatar" style="background:${tierInfo.color}22;">
+              ${avatarContent}
+            </div>
+            <div class="card-info">
+              <div class="card-name">${name}</div>
+              <div class="card-meta">
+                <span class="card-tier-badge" style="color:${tierInfo.color};">${escHtml(tierInfo.name)}</span>
+                <span>${followers} followers</span>
+              </div>
+            </div>
+            <div class="card-live-pill">
+              <div class="card-live-dot"></div>
+              <span class="card-live-text">Live</span>
+            </div>
+          </div>
+          <div class="card-score">
+            <span class="card-score-num">${capys}</span>
+            <span class="card-score-label">${scoreLabel}</span>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+// ── Sort controls ─────────────────────────────────────────────
+document.querySelectorAll('.sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sortBy = btn.dataset.sort;
+    document.getElementById('period-row').classList.toggle('hidden', sortBy !== 'capys');
+    render();
+  });
+});
+
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sortPeriod = btn.dataset.period;
+    render();
+  });
+});
+
+// Default active state
+document.querySelector('[data-sort="capys"]').classList.add('active');
+
+// ── Live listener ─────────────────────────────────────────────
+const liveQuery = query(collection(db, 'streamers'), where('live', '==', true));
+
+onSnapshot(liveQuery, (snap) => {
+  liveData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+  firstLoad = false;
+}, (err) => {
+  console.error('CapyRank live feed error:', err);
+  document.getElementById('loading').textContent = 'Could not load live streamers.';
+});
+</script>
+</body>
+</html>
