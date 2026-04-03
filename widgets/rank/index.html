@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapyRank — Rank Badge</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: transparent;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#widget.ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tier colour bar on the left */
+#tier-bar {
+  width: 4px;
+  height: 48px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px currentColor;
+  transition: background 0.4s ease;
+}
+
+/* Right-hand text stack */
+#rank-body { line-height: 1; }
+
+#rank-num {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  transition: color 0.4s ease;
+  text-shadow:
+    0 0 14px rgba(0,0,0,0.95),
+    0 2px 8px rgba(0,0,0,0.8),
+    -1px -1px 0 rgba(0,0,0,0.6),
+     1px  1px 0 rgba(0,0,0,0.6);
+}
+#rank-num.bump { animation: bump 0.35s ease; }
+@keyframes bump {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+#tier-name {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.55);
+  margin-top: 5px;
+  text-shadow:
+    0 1px 6px rgba(0,0,0,0.9),
+    -1px -1px 0 rgba(0,0,0,0.5),
+     1px  1px 0 rgba(0,0,0,0.5);
+}
+
+#capy-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  margin-top: 3px;
+  text-shadow:
+    0 1px 6px rgba(0,0,0,0.9),
+    -1px -1px 0 rgba(0,0,0,0.4),
+     1px  1px 0 rgba(0,0,0,0.4);
+}
+
+#error-msg {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+}
+</style>
+</head>
+<body>
+
+<div id="widget">
+  <div id="tier-bar"></div>
+  <div id="rank-body">
+    <div id="rank-num">—</div>
+    <div id="tier-name">CapyRank</div>
+    <div id="capy-count"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
+import { getFirestore, collection, query, where, orderBy, limit, getDocs, onSnapshot, doc }
+  from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
+  authDomain:        "capyrank-d8779.firebaseapp.com",
+  projectId:         "capyrank-d8779",
+  storageBucket:     "capyrank-d8779.firebasestorage.app",
+  messagingSenderId: "1038634831025",
+  appId:             "1:1038634831025:web:44801e37a6ac593b336690"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── URL params ────────────────────────────────────────────────
+const params   = new URLSearchParams(window.location.search);
+const username = (params.get('user') || '').toLowerCase().trim();
+const period   = params.get('period') || 'alltime';
+
+// ── Config ────────────────────────────────────────────────────
+const PERIOD_FIELDS = {
+  today:   'capys_today',
+  week:    'capys_this_week',
+  month:   'capys_this_month',
+  year:    'capys_this_year',
+  alltime: 'capys_total',
+};
+const PERIOD_LABELS = {
+  today:   'today',
+  week:    'this week',
+  month:   'this month',
+  year:    'this year',
+  alltime: 'all time',
+};
+const TIER_COLORS = {
+  cub:     '#f5c842',
+  capy:    '#8fca5a',
+  crew:    '#5ab8ca',
+  colony:  '#a070e0',
+  kingdom: '#e06050',
+};
+const TIER_NAMES = {
+  cub:     'Capy Cub',
+  capy:    'Capy',
+  crew:    'Capy Crew',
+  colony:  'Capy Colony',
+  kingdom: 'Capy Kingdom',
+};
+
+function getTier(followers) {
+  if (followers <= 100)  return 'cub';
+  if (followers <= 300)  return 'capy';
+  if (followers <= 750)  return 'crew';
+  if (followers <= 2000) return 'colony';
+  return 'kingdom';
+}
+
+// ── Elements ──────────────────────────────────────────────────
+const widget    = document.getElementById('widget');
+const rankNumEl = document.getElementById('rank-num');
+const tierBarEl = document.getElementById('tier-bar');
+const tierNameEl= document.getElementById('tier-name');
+const capyEl    = document.getElementById('capy-count');
+
+if (!username) {
+  rankNumEl.textContent = '?';
+  tierNameEl.textContent = 'No user set';
+  widget.classList.add('ready');
+}
+
+// ── Rank calculation ──────────────────────────────────────────
+const field = PERIOD_FIELDS[period] || 'capys_total';
+let   streamerId = null;
+let   rankDebounce = null;
+
+async function calcRank(streamerData) {
+  const followers = streamerData.followers || 0;
+  const tier      = getTier(followers);
+  const range     = {
+    cub:     [0,    100],
+    capy:    [101,  300],
+    crew:    [301,  750],
+    colony:  [751,  2000],
+    kingdom: [2001, 9999999],
+  }[tier];
+
+  const q = query(
+    collection(db, 'streamers'),
+    where('followers', '>=', range[0]),
+    where('followers', '<=', range[1]),
+    orderBy('followers'),
+    limit(200)
+  );
+  const snap = await getDocs(q);
+  const sorted = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b[field] || 0) - (a[field] || 0));
+
+  const pos = sorted.findIndex(s => s.id === streamerId);
+  return {
+    rank:  pos >= 0 ? pos + 1 : null,
+    total: sorted.length,
+    tier,
+    capys: streamerData[field] || 0,
+  };
+}
+
+function renderRank({ rank, tier, capys }) {
+  const color = TIER_COLORS[tier] || '#f5c842';
+  const label = PERIOD_LABELS[period] || 'all time';
+
+  // Tier bar
+  tierBarEl.style.background = color;
+  tierBarEl.style.color      = color; // for box-shadow currentColor
+
+  // Rank number
+  const rankText = rank ? `#${rank}` : '#—';
+  if (rankNumEl.textContent !== rankText) {
+    rankNumEl.classList.remove('bump');
+    void rankNumEl.offsetWidth;
+    rankNumEl.classList.add('bump');
+    rankNumEl.textContent = rankText;
+  }
+  rankNumEl.style.color = color;
+
+  // Tier + capys
+  tierNameEl.textContent = TIER_NAMES[tier] || 'CapyRank';
+  capyEl.textContent     = `${capys.toLocaleString()} capys ${label}`;
+
+  widget.classList.add('ready');
+}
+
+// ── Main ──────────────────────────────────────────────────────
+async function start() {
+  if (!username) return;
+
+  // Resolve username → streamer doc
+  const q    = query(collection(db, 'streamers'), where('username', '==', username), limit(1));
+  const snap = await getDocs(q);
+  if (snap.empty) {
+    rankNumEl.textContent  = '?';
+    tierNameEl.textContent = 'Streamer not found';
+    widget.classList.add('ready');
+    return;
+  }
+
+  streamerId = snap.docs[0].id;
+
+  // Live listener on the streamer doc
+  onSnapshot(doc(db, 'streamers', streamerId), async (docSnap) => {
+    if (!docSnap.exists()) return;
+    const data = docSnap.data();
+
+    // Debounce rank recalc — capys can update rapidly
+    clearTimeout(rankDebounce);
+    rankDebounce = setTimeout(async () => {
+      try {
+        const result = await calcRank(data);
+        renderRank(result);
+      } catch (e) {
+        // Show what we can without rank
+        const tier  = getTier(data.followers || 0);
+        const capys = data[field] || 0;
+        renderRank({ rank: null, tier, capys });
+      }
+    }, 1500);
+  });
+}
+
+start();
+</script>
+</body>
+</html>

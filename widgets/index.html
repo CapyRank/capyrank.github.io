@@ -207,6 +207,172 @@ body::before {
 .btn-download:hover { background: var(--yellow-dim); color: #fff; transform: translateY(-1px); }
 .btn-download svg { width: 13px; height: 13px; }
 
+/* WIDGET INPUT ROW */
+.widget-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.widget-input {
+  flex: 1;
+  min-width: 160px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.widget-input:focus { border-color: var(--yellow); }
+.widget-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='rgba(240,235,224,0.4)' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.widget-select:focus { border-color: var(--yellow); }
+.widget-url-preview {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-dimmer);
+  font-family: monospace;
+  display: none;
+  word-break: break-all;
+}
+.widget-copied-msg {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--yellow);
+  display: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+/* WIDGET MOCK PREVIEWS */
+.widget-mock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+}
+
+/* Herd Live mock */
+.herd-live-mock {
+  gap: 12px;
+}
+.mock-live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #4cca6a;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(76,202,106,0.6);
+}
+.mock-count {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 32px;
+  color: var(--yellow);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.mock-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.mock-label small {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dimmer);
+}
+
+/* Rank badge mock */
+.rank-badge-mock {
+  gap: 14px;
+}
+.mock-tier-bar {
+  width: 4px;
+  height: 44px;
+  border-radius: 2px;
+  background: #5ab8ca;
+  flex-shrink: 0;
+}
+.mock-rank-body { line-height: 1; }
+.mock-rank-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 34px;
+  color: #5ab8ca;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.mock-tier-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dimmer);
+  margin-top: 5px;
+}
+.mock-capy-count {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 11px;
+  color: rgba(240,235,224,0.2);
+  margin-top: 3px;
+}
+
+/* Counter mock */
+.counter-mock {
+  gap: 14px;
+}
+.mock-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.mock-counter-body { line-height: 1; }
+.mock-counter-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 40px;
+  color: var(--yellow);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.mock-counter-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dimmer);
+  margin-top: 6px;
+}
+
 /* COMING SOON CARD */
 .coming-soon-card {
   background: var(--bg-card);
@@ -271,7 +437,121 @@ footer a:hover { color: var(--text); }
 
   <div id="page-header">
     <h1>Stream <span>widgets</span></h1>
-    <p>Free assets to show off your CapyRank on stream and in your Twitch panels.</p>
+    <p>Free browser sources and panel images to bring CapyRank onto your stream — live, real-time, and zero maintenance.</p>
+  </div>
+
+  <!-- LIVE BROWSER SOURCE WIDGETS -->
+  <div class="widget-section">
+    <div class="widget-section-title">Live Browser Source Widgets</div>
+
+    <!-- HERD LIVE COUNT -->
+    <div class="panel-card" style="max-width:640px;margin-bottom:20px;">
+      <div class="panel-preview">
+        <div class="widget-mock herd-live-mock">
+          <div class="mock-live-dot"></div>
+          <div class="mock-count">4</div>
+          <div class="mock-label">of The Herd<small>streaming live</small></div>
+        </div>
+      </div>
+      <div style="padding:20px 22px 24px;">
+        <div class="panel-label" style="font-size:16px;margin-bottom:6px;">Herd Live Count</div>
+        <div class="panel-meta" style="font-size:13px;margin-bottom:20px;line-height:1.6;">Shows how many CapyRank streamers are live right now — updates automatically. No username needed, it's global. Great for any member of The Herd to show off the community.</div>
+
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button id="herd-live-copy-btn" class="btn-download" onclick="copyHerdLiveUrl()" style="white-space:nowrap;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy URL
+          </button>
+        </div>
+        <div id="herd-live-url-preview" class="widget-url-preview"></div>
+        <div id="herd-live-copied-msg" class="widget-copied-msg">✓ Copied to clipboard!</div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dimmer);line-height:1.7;">
+          <strong style="color:var(--text-dim);">Recommended OBS size:</strong> 320×60px &nbsp;·&nbsp; Check <em>Transparent background</em>.
+        </div>
+      </div>
+    </div>
+
+    <!-- RANK BADGE -->
+    <div class="panel-card" style="max-width:640px;margin-bottom:20px;">
+      <div class="panel-preview">
+        <div class="widget-mock rank-badge-mock">
+          <div class="mock-tier-bar"></div>
+          <div class="mock-rank-body">
+            <div class="mock-rank-num">#3</div>
+            <div class="mock-tier-name">Capy Crew</div>
+            <div class="mock-capy-count">1,234 capys all time</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:20px 22px 24px;">
+        <div class="panel-label" style="font-size:16px;margin-bottom:6px;">Rank Badge</div>
+        <div class="panel-meta" style="font-size:13px;margin-bottom:20px;line-height:1.6;">Your current rank and tier, live. Updates in real time as capys come in — your rank number changes as you climb. Coloured to match your league tier.</div>
+
+        <div class="widget-input-row">
+          <input id="rank-username" type="text" placeholder="Your Twitch username" class="widget-input"
+            onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'"
+            oninput="previewRankUrl()">
+          <select id="rank-period" class="widget-select" onchange="previewRankUrl()">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+            <option value="alltime" selected>All Time</option>
+          </select>
+          <button id="rank-copy-btn" class="btn-download" onclick="copyRankUrl()" style="white-space:nowrap;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy URL
+          </button>
+        </div>
+        <div id="rank-url-preview" class="widget-url-preview"></div>
+        <div id="rank-copied-msg" class="widget-copied-msg">✓ Copied to clipboard!</div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dimmer);line-height:1.7;">
+          <strong style="color:var(--text-dim);">Recommended OBS size:</strong> 300×80px &nbsp;·&nbsp; Check <em>Transparent background</em>.
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPY COUNTER -->
+    <div class="panel-card" style="max-width:640px;">
+      <div class="panel-preview">
+        <div class="widget-mock counter-mock">
+          <div class="mock-icon">🐾</div>
+          <div class="mock-counter-body">
+            <div class="mock-counter-num">1,247</div>
+            <div class="mock-counter-label">Capys Today</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:20px 22px 24px;">
+        <div class="panel-label" style="font-size:16px;margin-bottom:6px;">Capy Counter</div>
+        <div class="panel-meta" style="font-size:13px;margin-bottom:20px;line-height:1.6;">A live counter showing how many capys you've received for a given period. Animates up in real time as capys roll in during your stream.</div>
+
+        <div class="widget-input-row">
+          <input id="counter-username" type="text" placeholder="Your Twitch username" class="widget-input"
+            onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'"
+            oninput="previewCounterUrl()">
+          <select id="counter-period" class="widget-select" onchange="previewCounterUrl()">
+            <option value="today" selected>Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+            <option value="alltime">All Time</option>
+          </select>
+          <button id="counter-copy-btn" class="btn-download" onclick="copyCounterUrl()" style="white-space:nowrap;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy URL
+          </button>
+        </div>
+        <div id="counter-url-preview" class="widget-url-preview"></div>
+        <div id="counter-copied-msg" class="widget-copied-msg">✓ Copied to clipboard!</div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dimmer);line-height:1.7;">
+          <strong style="color:var(--text-dim);">Recommended OBS size:</strong> 320×80px &nbsp;·&nbsp; Check <em>Transparent background</em>.
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- PANEL IMAGES -->
@@ -376,6 +656,79 @@ footer a:hover { color: var(--text); }
 
 
 <script>
+// ── Shared helpers ────────────────────────────────────────────
+function showCopied(btnId, msgId, originalHtml) {
+  const btn = document.getElementById(btnId);
+  const msg = document.getElementById(msgId);
+  if (!btn || !msg) return;
+  msg.style.display = 'block';
+  btn.innerHTML = '✓ Copied!';
+  setTimeout(() => {
+    msg.style.display = 'none';
+    btn.innerHTML = originalHtml;
+  }, 2500);
+}
+
+const COPY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy URL';
+
+// ── Herd Live ─────────────────────────────────────────────────
+function copyHerdLiveUrl() {
+  const url     = 'https://capyrank.com/widgets/herd-live/';
+  const preview = document.getElementById('herd-live-url-preview');
+  preview.textContent  = url;
+  preview.style.display = 'block';
+  navigator.clipboard.writeText(url).then(() => showCopied('herd-live-copy-btn', 'herd-live-copied-msg', COPY_SVG));
+}
+
+// ── Rank Badge ────────────────────────────────────────────────
+function previewRankUrl() {
+  const u       = (document.getElementById('rank-username').value || '').trim().toLowerCase();
+  const period  = document.getElementById('rank-period').value;
+  const preview = document.getElementById('rank-url-preview');
+  if (u) {
+    preview.textContent   = `https://capyrank.com/widgets/rank/?user=${encodeURIComponent(u)}&period=${period}`;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function copyRankUrl() {
+  const u = (document.getElementById('rank-username').value || '').trim().toLowerCase();
+  if (!u) { document.getElementById('rank-username').focus(); return; }
+  const period = document.getElementById('rank-period').value;
+  const url    = `https://capyrank.com/widgets/rank/?user=${encodeURIComponent(u)}&period=${period}`;
+  const preview = document.getElementById('rank-url-preview');
+  preview.textContent   = url;
+  preview.style.display = 'block';
+  navigator.clipboard.writeText(url).then(() => showCopied('rank-copy-btn', 'rank-copied-msg', COPY_SVG));
+}
+
+// ── Capy Counter ──────────────────────────────────────────────
+function previewCounterUrl() {
+  const u       = (document.getElementById('counter-username').value || '').trim().toLowerCase();
+  const period  = document.getElementById('counter-period').value;
+  const preview = document.getElementById('counter-url-preview');
+  if (u) {
+    preview.textContent   = `https://capyrank.com/widgets/counter/?user=${encodeURIComponent(u)}&period=${period}`;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function copyCounterUrl() {
+  const u = (document.getElementById('counter-username').value || '').trim().toLowerCase();
+  if (!u) { document.getElementById('counter-username').focus(); return; }
+  const period = document.getElementById('counter-period').value;
+  const url    = `https://capyrank.com/widgets/counter/?user=${encodeURIComponent(u)}&period=${period}`;
+  const preview = document.getElementById('counter-url-preview');
+  preview.textContent   = url;
+  preview.style.display = 'block';
+  navigator.clipboard.writeText(url).then(() => showCopied('counter-copy-btn', 'counter-copied-msg', COPY_SVG));
+}
+
+// ── Overlay (existing) ────────────────────────────────────────
 function copyOverlayUrl() {
   const username = document.getElementById('overlay-username').value.trim().toLowerCase();
   const btn      = document.getElementById('overlay-copy-btn');

@@ -945,6 +945,12 @@ body::before {
     <div class="stat-num" id="stat-alltime">—</div>
     <div class="stat-label">Capys All Time</div>
   </div>
+  <div class="stat" id="stat-live-wrap" style="display:none;">
+    <div class="stat-num" id="stat-live" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span class="live-dot" id="stat-live-dot"></span><span id="stat-live-num">0</span>
+    </div>
+    <div class="stat-label">of The Herd live</div>
+  </div>
 </div>
 
 
@@ -1373,7 +1379,7 @@ function showToast({ giverName, giverAvatar, streamerName, amount }) {
         <strong>${escHtml(giverName)}</strong> gave
         <span class="toast-amount">${amount.toLocaleString()} ${plural}</span>
       </div>
-      <div class="toast-sub">🐾 to ${escHtml(streamerName)}</div>
+      <div class="toast-sub">🐾 to <span class="toast-amount">${escHtml(streamerName)}</span></div>
     </div>
   `;
 
@@ -1434,6 +1440,48 @@ function startLiveToasts() {
 }
 
 // ============================================================
+//  LIVE HERD COUNT  (streamers live right now)
+// ============================================================
+function startLiveHerd() {
+  const liveQuery = query(collection(db, 'streamers'), where('live', '==', true));
+  let   prevCount = null;
+
+  onSnapshot(liveQuery, (snap) => {
+    const count   = snap.size;
+    const wrap    = document.getElementById('stat-live-wrap');
+    const numEl   = document.getElementById('stat-live-num');
+    const dotEl   = document.getElementById('stat-live-dot');
+
+    if (!wrap || !numEl) return;
+
+    // Always show the stat once we have data — hide only if truly 0 on first load
+    // After that let it count down naturally so it doesn't jump in/out
+    if (prevCount === null) {
+      if (count > 0) wrap.style.display = '';
+    } else {
+      wrap.style.display = '';
+    }
+
+    if (prevCount !== null && count !== prevCount) {
+      animateStat('stat-live-num', prevCount, count, 600);
+    } else if (prevCount === null) {
+      numEl.textContent = count.toLocaleString();
+    }
+
+    // Pulse dot only when someone is actually live
+    if (count === 0) {
+      dotEl.style.background = 'rgba(240,235,224,0.15)';
+      dotEl.style.animation  = 'none';
+    } else {
+      dotEl.style.background = '';
+      dotEl.style.animation  = '';
+    }
+
+    prevCount = count;
+  });
+}
+
+// ============================================================
 //  LIVE STAT COUNTERS  (re-animate when meta/global updates)
 // ============================================================
 function startLiveStats() {
@@ -1474,6 +1522,7 @@ fetchStats();
 renderLeaderboard();
 startLiveToasts();
 startLiveStats();
+startLiveHerd();
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-random-capy');
   if (btn) btn.addEventListener('click', goRandomCapy);

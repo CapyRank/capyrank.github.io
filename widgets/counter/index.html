@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapyRank — Capy Counter</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: transparent;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#widget.ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Paw icon */
+#icon {
+  font-size: 26px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
+  flex-shrink: 0;
+}
+
+/* Number + label stack */
+#counter-body { line-height: 1; }
+
+#counter-num {
+  font-size: 48px;
+  font-weight: 900;
+  color: #f5c842;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-shadow:
+    0 0 16px rgba(0,0,0,0.95),
+    0 2px 8px rgba(0,0,0,0.85),
+    -1px -1px 0 rgba(0,0,0,0.6),
+     1px  1px 0 rgba(0,0,0,0.6);
+}
+
+/* Tick-up animation — individual digits slide through */
+#counter-num.tick {
+  animation: tick-up 0.25s ease;
+}
+@keyframes tick-up {
+  0%   { transform: translateY(0)    opacity: 1; }
+  30%  { transform: translateY(-6px); opacity: 0.5; }
+  60%  { transform: translateY(4px);  opacity: 0.7; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+#counter-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+  text-shadow:
+    0 1px 6px rgba(0,0,0,0.95),
+    -1px -1px 0 rgba(0,0,0,0.5),
+     1px  1px 0 rgba(0,0,0,0.5);
+}
+
+#error-msg {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+}
+</style>
+</head>
+<body>
+
+<div id="widget">
+  <div id="icon">🐾</div>
+  <div id="counter-body">
+    <div id="counter-num">—</div>
+    <div id="counter-label">Capys</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js';
+import { getFirestore, collection, query, where, limit, getDocs, onSnapshot, doc }
+  from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
+  authDomain:        "capyrank-d8779.firebaseapp.com",
+  projectId:         "capyrank-d8779",
+  storageBucket:     "capyrank-d8779.firebasestorage.app",
+  messagingSenderId: "1038634831025",
+  appId:             "1:1038634831025:web:44801e37a6ac593b336690"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── URL params ────────────────────────────────────────────────
+const params   = new URLSearchParams(window.location.search);
+const username = (params.get('user') || '').toLowerCase().trim();
+const period   = params.get('period') || 'today';
+
+// ── Config ────────────────────────────────────────────────────
+const PERIOD_FIELDS = {
+  today:   'capys_today',
+  week:    'capys_this_week',
+  month:   'capys_this_month',
+  year:    'capys_this_year',
+  alltime: 'capys_total',
+};
+const PERIOD_LABELS = {
+  today:   'Capys Today',
+  week:    'Capys This Week',
+  month:   'Capys This Month',
+  year:    'Capys This Year',
+  alltime: 'Capys All Time',
+};
+
+const field = PERIOD_FIELDS[period] || 'capys_today';
+const label = PERIOD_LABELS[period] || 'Capys Today';
+
+// ── Elements ──────────────────────────────────────────────────
+const widget    = document.getElementById('widget');
+const numEl     = document.getElementById('counter-num');
+const labelEl   = document.getElementById('counter-label');
+
+labelEl.textContent = label;
+
+if (!username) {
+  numEl.textContent = '?';
+  labelEl.textContent = 'No user set';
+  widget.classList.add('ready');
+}
+
+// ── Animated counter ──────────────────────────────────────────
+function animateCount(from, to, duration = 600) {
+  const start = performance.now();
+  function step(now) {
+    const t   = Math.min((now - start) / duration, 1);
+    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    const val  = Math.round(from + (to - from) * ease);
+    numEl.textContent = val.toLocaleString();
+    if (t < 1) requestAnimationFrame(step);
+    else        numEl.textContent = to.toLocaleString();
+  }
+  requestAnimationFrame(step);
+}
+
+// ── Main ──────────────────────────────────────────────────────
+async function start() {
+  if (!username) return;
+
+  // Resolve username → streamer doc
+  const q    = query(collection(db, 'streamers'), where('username', '==', username), limit(1));
+  const snap = await getDocs(q);
+  if (snap.empty) {
+    numEl.textContent   = '?';
+    labelEl.textContent = 'Streamer not found';
+    widget.classList.add('ready');
+    return;
+  }
+
+  const streamerId = snap.docs[0].id;
+  let   prevValue  = null;
+
+  // Live listener on the streamer doc
+  onSnapshot(doc(db, 'streamers', streamerId), (docSnap) => {
+    if (!docSnap.exists()) return;
+    const data  = docSnap.data();
+    const value = data[field] || 0;
+
+    if (prevValue === null) {
+      // First load — animate up from zero
+      animateCount(0, value, 1000);
+    } else if (value !== prevValue) {
+      // Live tick — animate from old to new
+      numEl.classList.remove('tick');
+      void numEl.offsetWidth;
+      numEl.classList.add('tick');
+      animateCount(prevValue, value, 400);
+    }
+
+    prevValue = value;
+    widget.classList.add('ready');
+  });
+}
+
+start();
+</script>
+</body>
+</html>
