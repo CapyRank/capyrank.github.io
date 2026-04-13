@@ -1087,7 +1087,7 @@ async function loadViewerSection(username) {
   if (snap.empty) return;
 
   const data = snap.docs[0].data();
-  const DAILY = 100;
+  const DAILY = data.daily_allowance || 100;
 
   document.getElementById('viewer-section').style.display = 'block';
   animateStat('vc-total',     data.total_given_alltime || 0);
@@ -1107,7 +1107,7 @@ async function loadViewerProfile(username) {
   if (snap.empty) { showNotFound(); return; }
 
   const data = snap.docs[0].data();
-  const DAILY = 100;
+  const DAILY = data.daily_allowance || 100;
 
   document.title = `${data.display_name || username} — CapyRank`;
 
