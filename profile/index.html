@@ -338,6 +338,7 @@ body::before {
    TOP GIVERS
 ============================================================ */
 #top-givers-section {
+  margin-bottom: 32px;
   animation: fade-up 0.4s ease 0.14s both;
 }
 
@@ -689,9 +690,11 @@ body::before {
    REFERRALS
 ============================================================ */
 #referral-section {
-  margin-bottom: 32px;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
   display: none;
-  animation: fade-up 0.4s ease 0.18s both;
+  animation: fade-up 0.4s ease 0.22s both;
 }
 #referral-section h2 {
   font-family: 'Nunito', sans-serif;
@@ -858,17 +861,6 @@ body::before {
       <div id="givers-empty">No capys given in this period yet. 🐾</div>
     </div>
 
-    <!-- REFERRALS -->
-    <div id="referral-section">
-      <h2>Refer <span>Streamers</span></h2>
-      <div id="referral-link-row">
-        <input id="referral-link-input" type="text" readonly>
-        <button id="referral-copy-btn">Copy Link</button>
-      </div>
-      <div id="referral-stats"></div>
-      <div id="referral-referred-by"></div>
-    </div>
-
     <!-- VIEWER SECTION -->
     <div id="viewer-section">
       <h2>Viewer <span>Stats</span></h2>
@@ -890,6 +882,17 @@ body::before {
         <h3>Where they've given capys</h3>
         <div id="breakdown-list"></div>
       </div>
+    </div>
+
+    <!-- REFERRALS -->
+    <div id="referral-section">
+      <h2>Refer <span>Streamers</span></h2>
+      <div id="referral-link-row">
+        <input id="referral-link-input" type="text" readonly>
+        <button id="referral-copy-btn">Copy Link</button>
+      </div>
+      <div id="referral-stats"></div>
+      <div id="referral-referred-by"></div>
     </div>
 
   </div><!-- /profile-content -->
