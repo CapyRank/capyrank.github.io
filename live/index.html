@@ -141,6 +141,55 @@ body::before {
 .nav-discord:hover { color: rgba(0,0,0,0.7); background: rgba(0,0,0,0.08); }
 .nav-discord svg { width: 20px; height: 20px; }
 
+#nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #1c1a17;
+  z-index: 20;
+}
+#nav-toggle svg { width: 24px; height: 24px; display: block; }
+
+@media (max-width: 640px) {
+  #header-inner { padding: 0 16px; }
+  #logo-capy { width: 60px; height: 60px; bottom: -12px; }
+  #logo-text { font-size: 19px; }
+
+  #nav-toggle { display: flex; align-items: center; justify-content: center; }
+
+  #header-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--yellow);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+    box-shadow: 0 12px 20px rgba(0,0,0,0.18);
+  }
+  #header-nav.open { max-height: 400px; }
+
+  .nav-link { width: 100%; border-radius: 0; padding: 14px 20px; }
+  .nav-discord {
+    width: 100%; height: auto;
+    justify-content: flex-start; gap: 10px;
+    border-radius: 0; padding: 14px 20px;
+  }
+  .nav-discord::after {
+    content: 'Discord';
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: 13px;
+    color: rgba(0,0,0,0.6);
+  }
+  .btn-join { display: block; text-align: center; margin: 10px 20px 16px; }
+}
+
 /* ============================================================
    HERO
 ============================================================ */
@@ -523,6 +572,11 @@ body::before {
       </a>
       <a href="https://capyrank.com/join" class="btn-join">Join CapyRank</a>
     </nav>
+    <button id="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </div>
 </div>
 
@@ -756,6 +810,19 @@ document.querySelectorAll('.period-btn').forEach(btn => {
 
 // Default active state
 document.querySelector('[data-sort="capys"]').classList.add('active');
+
+// ── Mobile nav toggle ──────────────────────────────────────────
+const navToggle = document.getElementById('nav-toggle');
+const headerNav = document.getElementById('header-nav');
+if (navToggle && headerNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = headerNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  headerNav.addEventListener('click', (e) => {
+    if (e.target.closest('a')) headerNav.classList.remove('open');
+  });
+}
 
 // ── Live listener ─────────────────────────────────────────────
 const liveQuery = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
