@@ -1225,7 +1225,7 @@ function renderReferralSection(username, data) {
   const statsEl = document.getElementById('referral-stats');
   statsEl.innerHTML = count > 0
     ? `<span>${count.toLocaleString()}</span> streamer${count === 1 ? '' : 's'} referred · <span>${earned.toLocaleString()}</span> capys earned from referrals`
-    : `Share this link — when a streamer joins CapyRank using it, you both get 1000 capys. 🐾`;
+    : `Share this link — when a streamer joins CapyRank using it, you both get 500 capys. 🐾`;
 
   const referredByEl = document.getElementById('referral-referred-by');
   if (data.referred_by) {
