@@ -758,7 +758,7 @@ document.querySelectorAll('.period-btn').forEach(btn => {
 document.querySelector('[data-sort="capys"]').classList.add('active');
 
 // ── Live listener ─────────────────────────────────────────────
-const liveQuery = query(collection(db, 'streamers'), where('live', '==', true));
+const liveQuery = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
 
 onSnapshot(liveQuery, (snap) => {
   liveData = snap.docs.map(d => ({ id: d.id, ...d.data() }));

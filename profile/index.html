@@ -684,6 +684,67 @@ body::before {
   font-size: 11px;
   color: var(--text-dimmer);
 }
+
+/* ============================================================
+   REFERRALS
+============================================================ */
+#referral-section {
+  margin-bottom: 32px;
+  display: none;
+  animation: fade-up 0.4s ease 0.18s both;
+}
+#referral-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+#referral-section h2 span { color: var(--yellow); }
+
+#referral-link-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+#referral-link-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: var(--text-dimmer);
+}
+#referral-copy-btn {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+#referral-copy-btn:hover { border-color: var(--border-warm); transform: translateY(-1px); }
+
+#referral-stats {
+  font-size: 13px;
+  color: var(--text-dimmer);
+}
+#referral-stats span { color: var(--yellow); font-weight: 700; }
+
+#referral-referred-by {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 6px;
+}
 </style>
 </head>
 <body>
@@ -797,6 +858,17 @@ body::before {
       <div id="givers-empty">No capys given in this period yet. 🐾</div>
     </div>
 
+    <!-- REFERRALS -->
+    <div id="referral-section">
+      <h2>Refer <span>Streamers</span></h2>
+      <div id="referral-link-row">
+        <input id="referral-link-input" type="text" readonly>
+        <button id="referral-copy-btn">Copy Link</button>
+      </div>
+      <div id="referral-stats"></div>
+      <div id="referral-referred-by"></div>
+    </div>
+
     <!-- VIEWER SECTION -->
     <div id="viewer-section">
       <h2>Viewer <span>Stats</span></h2>
@@ -903,6 +975,8 @@ async function loadProfile(username) {
   const streamerId = docSnap.id;
   const data       = docSnap.data();
 
+  if (data.hidden === true) { showNotFound(); return; }
+
   document.title = `${data.display_name || username} — CapyRank`;
 
   // Avatar
@@ -977,6 +1051,9 @@ async function loadProfile(username) {
       </a>`).join('');
     clipsSection.style.display = 'block';
   }
+
+  // Referrals
+  renderReferralSection(username, data);
 
   // Show content
   document.getElementById('loading').style.display         = 'none';
@@ -1107,6 +1184,7 @@ async function loadViewerProfile(username) {
   if (snap.empty) { showNotFound(); return; }
 
   const data = snap.docs[0].data();
+  if (data.hidden === true) { showNotFound(); return; }
   const DAILY = data.daily_allowance || 100;
 
   document.title = `${data.display_name || username} — CapyRank`;
@@ -1131,6 +1209,38 @@ async function loadViewerProfile(username) {
   animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
 
   loadGivenBreakdown(snap.docs[0].id);
+}
+
+function renderReferralSection(username, data) {
+  const section = document.getElementById('referral-section');
+  const link     = `https://capyrank.com/join?ref=${encodeURIComponent(username)}`;
+
+  document.getElementById('referral-link-input').value = link;
+
+  const count  = data.referral_count || 0;
+  const earned = data.referral_bonus_earned || 0;
+  const statsEl = document.getElementById('referral-stats');
+  statsEl.innerHTML = count > 0
+    ? `<span>${count.toLocaleString()}</span> streamer${count === 1 ? '' : 's'} referred · <span>${earned.toLocaleString()}</span> capys earned from referrals`
+    : `Share this link — when a streamer joins CapyRank using it, you both get 1000 capys. 🐾`;
+
+  const referredByEl = document.getElementById('referral-referred-by');
+  if (data.referred_by) {
+    referredByEl.textContent = `Referred by ${data.referred_by}`;
+  }
+
+  section.style.display = 'block';
+
+  const copyBtn = document.getElementById('referral-copy-btn');
+  copyBtn.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(link);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+    } catch (e) {
+      document.getElementById('referral-link-input').select();
+    }
+  };
 }
 
 async function loadGivenBreakdown(userId) {

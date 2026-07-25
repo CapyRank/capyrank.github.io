@@ -132,7 +132,7 @@ const widget   = document.getElementById('widget');
 
 let prevCount = null;
 
-const liveQuery = query(collection(db, 'streamers'), where('live', '==', true));
+const liveQuery = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
 
 onSnapshot(liveQuery, (snap) => {
   const count = snap.size;

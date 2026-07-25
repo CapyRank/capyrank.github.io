@@ -796,6 +796,144 @@ body::before {
 
 
 /* ============================================================
+   FEATURED CAPY
+============================================================ */
+#featured-section {
+  max-width: 640px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+  display: none;
+}
+#featured-section h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+#featured-section h2 span { color: var(--yellow); }
+
+.featured-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.featured-player-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+.featured-player-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.featured-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.featured-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-hover);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+}
+.featured-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+.featured-info { flex: 1; min-width: 0; }
+.featured-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.featured-sub {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 1px;
+}
+
+.featured-watch {
+  flex-shrink: 0;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--yellow);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.featured-watch:hover { color: var(--yellow-dim); }
+
+#featured-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.featured-nav-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  transition: border-color 0.15s;
+}
+.featured-nav-btn:hover { border-color: var(--border-warm); }
+
+#featured-dots {
+  display: flex;
+  gap: 6px;
+}
+.featured-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.featured-dot.active { background: var(--yellow); }
+
+
+/* ============================================================
    LIVE TOASTS
 ============================================================ */
 #toast-container {
@@ -972,6 +1110,20 @@ body::before {
 
 
 <!-- ============================================================
+     FEATURED CAPY
+============================================================ -->
+<section id="featured-section">
+  <h2>Featured <span>Capy</span></h2>
+  <div id="featured-card-wrap"></div>
+  <div id="featured-nav" style="display:none;">
+    <button class="featured-nav-btn" id="featured-prev" aria-label="Previous">‹</button>
+    <div id="featured-dots"></div>
+    <button class="featured-nav-btn" id="featured-next" aria-label="Next">›</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
      NEW CAPYS STRIP
 ============================================================ -->
 <div id="new-capys-wrap">
@@ -1137,6 +1289,7 @@ async function fetchLeaderboard(league, time) {
     q = query(ref,
       where('followers', '>=', range[0]),
       where('followers', '<=', range[1] === Infinity ? 9999999 : range[1]),
+      where('hidden', '==', false),
       orderBy('followers'),
       limit(200)
     );
@@ -1150,6 +1303,7 @@ async function fetchLeaderboard(league, time) {
     // "all" — no follower filter, only show streamers with capys
     q = query(ref,
       where(field, '>', 0),
+      where('hidden', '==', false),
       orderBy(field, 'desc'),
       limit(25)
     );
@@ -1311,14 +1465,14 @@ function animateStat(id, from, to, duration) {
 async function fetchNewestCapys() {
   try {
     const ref = collection(db, 'streamers');
-    const q   = query(ref, orderBy('joined_at', 'desc'), limit(20));
+    const q   = query(ref, where('hidden', '==', false), orderBy('joined_at', 'desc'), limit(20));
     const snap = await getDocs(q);
     const streamers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderNewestStrip(streamers);
   } catch(e) {
     // joined_at index may not exist yet — fall back to just fetching all and showing them
     try {
-      const snap = await getDocs(query(collection(db, 'streamers'), limit(20)));
+      const snap = await getDocs(query(collection(db, 'streamers'), where('hidden', '==', false), limit(20)));
       renderNewestStrip(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch(_) {
       document.getElementById('new-capys-wrap').style.display = 'none';
@@ -1461,7 +1615,7 @@ function startLiveToasts() {
 //  LIVE HERD COUNT  (streamers live right now)
 // ============================================================
 function startLiveHerd() {
-  const liveQuery = query(collection(db, 'streamers'), where('live', '==', true));
+  const liveQuery = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
   let   prevCount = null;
 
   onSnapshot(liveQuery, (snap) => {
@@ -1500,6 +1654,105 @@ function startLiveHerd() {
 }
 
 // ============================================================
+//  FEATURED CAPY  (random live streamer, carousel if multiple)
+// ============================================================
+let featuredData     = [];
+let featuredIndex    = 0;
+let featuredTimer    = null;
+let featuredHasSnap  = false;
+
+function startFeaturedCapy() {
+  const q = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
+
+  onSnapshot(q, (snap) => {
+    featuredData = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.username);
+
+    // Pick a fresh random starting slide only on the very first snapshot,
+    // or if the previously-featured streamer went offline.
+    if (!featuredHasSnap || featuredIndex >= featuredData.length) {
+      featuredIndex = featuredData.length ? Math.floor(Math.random() * featuredData.length) : 0;
+    }
+    featuredHasSnap = true;
+
+    renderFeatured();
+  }, (err) => {
+    console.error('CapyRank featured feed error:', err);
+  });
+
+  document.getElementById('featured-prev').addEventListener('click', () => stepFeatured(-1));
+  document.getElementById('featured-next').addEventListener('click', () => stepFeatured(1));
+}
+
+function stepFeatured(delta) {
+  if (!featuredData.length) return;
+  featuredIndex = (featuredIndex + delta + featuredData.length) % featuredData.length;
+  renderFeatured();
+}
+
+function renderFeatured() {
+  const section = document.getElementById('featured-section');
+  const wrap    = document.getElementById('featured-card-wrap');
+  const nav     = document.getElementById('featured-nav');
+  const dots    = document.getElementById('featured-dots');
+
+  clearInterval(featuredTimer);
+  featuredTimer = null;
+
+  if (!featuredData.length) {
+    section.style.display = 'none';
+    wrap.innerHTML = '';
+    return;
+  }
+
+  section.style.display = 'block';
+  nav.style.display = featuredData.length > 1 ? 'flex' : 'none';
+
+  const s          = featuredData[featuredIndex];
+  const username   = s.username;
+  const name       = escHtml(s.display_name || username);
+  const followers  = (s.followers || 0).toLocaleString();
+  const avatarContent = s.avatar_url
+    ? `<img src="${escHtml(s.avatar_url)}" alt="">`
+    : escHtml((s.display_name || username)[0].toUpperCase());
+
+  wrap.innerHTML = `
+    <div class="featured-card">
+      <div class="featured-player-wrap">
+        <iframe
+          src="https://player.twitch.tv/?channel=${encodeURIComponent(username)}&parent=capyrank.com&parent=www.capyrank.com&muted=true"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="featured-meta">
+        <a class="featured-identity" href="/profile/?user=${encodeURIComponent(username)}">
+          <div class="featured-avatar">${avatarContent}</div>
+          <div class="featured-info">
+            <div class="featured-name"><span class="live-dot"></span>${name}</div>
+            <div class="featured-sub">${followers} followers</div>
+          </div>
+        </a>
+        <a class="featured-watch" href="https://twitch.tv/${encodeURIComponent(username)}" target="_blank" rel="noopener">Watch on Twitch ↗</a>
+      </div>
+    </div>
+  `;
+
+  if (featuredData.length > 1) {
+    dots.innerHTML = featuredData.map((_, i) =>
+      `<div class="featured-dot${i === featuredIndex ? ' active' : ''}" data-i="${i}"></div>`
+    ).join('');
+    dots.querySelectorAll('.featured-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        featuredIndex = parseInt(dot.dataset.i, 10);
+        renderFeatured();
+      });
+    });
+
+    featuredTimer = setInterval(() => stepFeatured(1), 8000);
+  }
+}
+
+// ============================================================
 //  LIVE STAT COUNTERS  (re-animate when meta/global updates)
 // ============================================================
 function startLiveStats() {
@@ -1526,7 +1779,7 @@ async function goRandomCapy() {
     const snap = await getDocs(collection(db, 'streamers'));
     const ids   = snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
-      .filter(s => s.id !== '1458883661' && s.username);
+      .filter(s => s.id !== '1458883661' && s.username && s.hidden !== true);
     if (!ids.length) { if (btn) { btn.textContent = '🎲 Random Capy'; btn.disabled = false; } return; }
     const pick = ids[Math.floor(Math.random() * ids.length)];
     window.location.href = `/profile/?user=${encodeURIComponent(pick.username)}`;
@@ -1541,6 +1794,7 @@ renderLeaderboard();
 startLiveToasts();
 startLiveStats();
 startLiveHerd();
+startFeaturedCapy();
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-random-capy');
   if (btn) btn.addEventListener('click', goRandomCapy);
