@@ -250,6 +250,7 @@ a.inline-link:hover { text-decoration: underline; }
       <li>Capy counts (given and received)</li>
     </ul>
     <p>When a viewer gives Capys in chat, we store their Twitch user ID, username, display name, profile picture URL, and a record of how many Capys they've given and to whom.</p>
+    <p>When a viewer plays CapyGames in chat, we store their Twitch user ID, username and display name, their Yuzu balance, how many games they've played and won, and a log of game results (which Twitch user IDs took part and what they earned). Game logs contain user IDs only, not names.</p>
     <p>We do not collect email addresses, passwords, payment information, or any sensitive personal data.</p>
   </div>
 
@@ -278,8 +279,8 @@ a.inline-link:hover { text-decoration: underline; }
   <div class="section">
     <h2>Data Retention & Deletion</h2>
     <p>Capy counts reset on a daily, weekly, monthly, and yearly basis as part of normal platform operation. All-time totals are retained indefinitely while a streamer remains registered.</p>
-    <p>To remove your data yourself at any time, type <strong>!capydelete</strong>, then confirm with <strong>!capydelete confirm</strong> within 2 minutes. This immediately anonymizes your username, display name, avatar, motto, and capy stats, and removes you from all public leaderboards and profile pages. Viewers can do this in any channel where the CapyRank bot is present; registered streamers need to run it in their own channel, since CapyRank also leaves the channel as part of the removal.</p>
-    <p>Numeric records tied to other people's accounts (for example, a streamer's total from a supporter who has been anonymized) are kept so their own history stays accurate — those records no longer identify you once your details are removed.</p>
+    <p>To remove your data yourself at any time, type <strong>!capydelete</strong>, then confirm with <strong>!capydelete confirm</strong> within 2 minutes. This immediately and permanently deletes your profile, capy stats, Yuzu and game stats, and removes you from all public leaderboards and profile pages. Viewers can do this in any channel where the CapyRank bot is present; registered streamers need to run it in their own channel, since CapyRank also leaves the channel as part of the removal.</p>
+    <p>Numeric records that belong to other people's history are kept so their totals stay accurate — for example, the Capys you gave still count towards the streamers you supported. In those records your Twitch ID and name are replaced with a random placeholder that can't be traced back to you, so nothing left in our database identifies you. If you join CapyRank again later, you start completely fresh with no link to your old data.</p>
     <p>If you're unable to use Twitch chat (for example, a deactivated Twitch account), contact us at <a class="inline-link" href="mailto:hello@capyrank.com">hello@capyrank.com</a> and we'll handle the request manually.</p>
   </div>
 
