@@ -551,7 +551,36 @@ footer a:hover { color: var(--text); }
         <strong><code>!capymottoclear</code></strong> — remove your motto (streamers only)<br><br>
         <strong><code>!yuzu</code></strong> — check your yuzu balance<br><br>
         <strong><code>!capygames</code></strong> — what CapyGames are (streamers and mods: see below for controls)<br><br>
-        <strong><code>!capyrace</code></strong>, <strong><code>!capycrate</code></strong>, <strong><code>!capysoak</code></strong>, <strong><code>!capyguess</code></strong> — join a running game (see <a href="#capygames">CapyGames</a>)
+        <strong><code>!capyrace</code></strong>, <strong><code>!capycrate</code></strong>, <strong><code>!capysoak</code></strong>, <strong><code>!capyguess</code></strong> — join a running game (see <a href="#capygames">CapyGames</a>)<br><br>
+        <strong><code>!capyraid</code></strong> — suggests a random CapyRank streamer who's live right now, for your end-of-stream raid (streamers and mods)<br><br>
+        <strong><code>!capyannounce on</code></strong> / <strong><code>off</code></strong> — turn chat announcements on or off (streamers and mods, see below)
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        What does the bot announce in my chat?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        A few short celebrations, all about <strong>you</strong>:
+        <br><br>
+        🏆 <strong>Milestones</strong> — when you pass 100, 250, 500, 1,000, 2,500, 5,000… capys all-time<br><br>
+        📈 <strong>Leaderboard climbs</strong> — when you reach a new best spot in your tier's top 10 this week<br><br>
+        🐾 <strong>One reminder per stream</strong> — about 45 minutes in, if chat is active, your current rank and how to help you climb<br><br>
+        🧭 <strong>Herd raids</strong> — when another CapyRank streamer raids you
+        <br><br>
+        They're on by default and share the same 12-messages-an-hour limit as CapyGames. Not your thing? Type <code>!capyannounce off</code> — this is separate from <code>!capygames off</code>, so you can keep one and not the other.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        Do I get anything for raiding other CapyRank streamers?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        Yes! Raid another CapyRank streamer and you'll earn <strong>+25 Capys</strong> (once a day), and the bot welcomes your herd in their chat. Not sure who's live? Type <code>!capyraid</code> for a suggestion.
       </div>
     </div>
 
