@@ -386,7 +386,7 @@ footer a:hover { color: var(--text); }
         <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="faq-answer">
-        <strong>Viewers</strong> don't need to sign up for anything — just type <code>!capy</code> in any CapyRank-connected channel and you're good to go. <strong>Streamers</strong> need to connect their Twitch account via the <a href="https://capyrank.com/join">Join CapyRank</a> flow, which takes about 30 seconds.
+        <strong>Viewers</strong> don't need to sign up for anything — just type <code>!capy</code> in any CapyRank-connected channel and you're good to go. The same goes for <a href="#capygames">CapyGames</a>: just chat. <strong>Streamers</strong> need to connect their Twitch account via the <a href="https://capyrank.com/join">Join CapyRank</a> flow, which takes about 30 seconds.
       </div>
     </div>
 
@@ -425,6 +425,85 @@ footer a:hover { color: var(--text); }
       </button>
       <div class="faq-answer">
         Yes — visit <a href="https://capyrank.com/profile/your_twitch_username">capyrank.com/profile/your_twitch_username</a> to see all the streamers you've supported and your giving stats.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CAPYGAMES & YUZU -->
+  <div class="faq-section" id="capygames">
+    <div class="faq-section-title">CapyGames &amp; Yuzu 🍊</div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        What are CapyGames?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        CapyGames are quick, optional games the CapyRank bot runs in chat while a streamer is live. Every so often the bot announces a game, you join with one command, and 60 seconds later the results are in. You earn <strong>Yuzu 🍊</strong> just for playing, and winners earn bonus Capys for the streamer.
+        <br><br>
+        Streamers choose whether to turn them on, so you'll only see them in some channels. <strong>No sign-up needed — just chat.</strong>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        What's the difference between Capys and Yuzu?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <strong>Capys</strong> are for supporting streamers. You get 100 a day (150 if you follow CapyRank) and give them away with <code>!capy</code>.
+        <br><br>
+        <strong>Yuzu 🍊</strong> are yours. You earn them by playing CapyGames and you keep them. Yuzu can never be bet or lost — no game ever takes yuzu away. There's nothing to spend them on just yet, but a yuzu shop is coming.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        What games are there?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <strong>🏁 Capy Race</strong> — <code>!capyrace 1-5</code> · back a capy. If yours wins, you earn yuzu and the streamer gets capys.<br><br>
+        <strong>📦 Crate Drop</strong> — <code>!capycrate 1-5</code> · one crate hides a capy (big win), one an angry goose (nothing), the rest a little yuzu.<br><br>
+        <strong>🌊 Big Soak</strong> — <code>!capysoak</code> · a team game. If enough of chat soaks, the spring warms up and everyone wins.<br><br>
+        <strong>🔢 Capy Count</strong> — <code>!capyguess 1-100</code> · guess how many capys are in the spring. Closest guess wins.<br><br>
+        There are also <strong>quick-fire rounds</strong> — no command needed, just type the answer in chat. Fastest correct answer wins:<br>
+        🔤 <strong>Unjumble</strong> — unscramble the word<br>
+        📋 <strong>Roll Call</strong> — count the yuzu in the row<br>
+        👀 <strong>Where's the goose?</strong> — type the goose's position
+        <br><br>
+        Everyone who joins a game earns at least 1 yuzu, win or lose.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        Do game Capys use my daily allowance?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        No. Capys you win in a game are gifted to the streamer in your name — they count towards your total given and the streamer's ranking — but they never come out of your daily allowance.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        What's a Frenzy? 🔥
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        Every so often (at most once per stream) the bot calls a <strong>🔥 Frenzy</strong>. For 60 seconds, every Capy you give with <code>!capy</code> counts double for the streamer — you spend 1, they get 2. Gifting during a Frenzy also earns you a little yuzu.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        How do I check my Yuzu?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        Type <code>!yuzu</code> in any CapyRank channel, or visit your profile at <code>capyrank.com/profile/?user=yourname</code> to see your yuzu, games played and games won.
       </div>
     </div>
 
@@ -469,7 +548,29 @@ footer a:hover { color: var(--text); }
         <strong><code>!capytop</code></strong> — show the 5 top supporters of the channel<br><br>
         <strong><code>!capyhelp</code></strong> or <strong><code>!capy?</code></strong> — quick CapyRank guide<br><br>
         <strong><code>!capymotto &lt;text&gt;</code></strong> — set a short motto shown on your profile (streamers only)<br><br>
-        <strong><code>!capymottoclear</code></strong> — remove your motto (streamers only)
+        <strong><code>!capymottoclear</code></strong> — remove your motto (streamers only)<br><br>
+        <strong><code>!yuzu</code></strong> — check your yuzu balance<br><br>
+        <strong><code>!capygames</code></strong> — what CapyGames are (streamers and mods: see below for controls)<br><br>
+        <strong><code>!capyrace</code></strong>, <strong><code>!capycrate</code></strong>, <strong><code>!capysoak</code></strong>, <strong><code>!capyguess</code></strong> — join a running game (see <a href="#capygames">CapyGames</a>)
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        How do I turn on CapyGames?
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        CapyGames are <strong>off by default</strong>. You or any of your mods can control them from chat:
+        <br><br>
+        <strong><code>!capygames on</code></strong> / <strong><code>off</code></strong> — turn games on or off<br><br>
+        <strong><code>!capygames 1-4</code></strong> — games per hour (default 2)<br><br>
+        <strong><code>!capygames now</code></strong> — start a game right away (at most once every 5 minutes)<br><br>
+        <strong><code>!capygames frenzy</code></strong> — start this stream's Frenzy<br><br>
+        <strong><code>!capygames quiet</code></strong> — fewer announcements<br><br>
+        <strong><code>!capygames status</code></strong> — show your current settings
+        <br><br>
+        Games only run while you're live and at least 3 people have chatted in the last 10 minutes. The bot never posts more than 12 game messages an hour, and your channel can earn up to 150 bonus Capys a day from games.
       </div>
     </div>
 
@@ -519,6 +620,13 @@ function toggle(btn) {
   const isOpen = btn.classList.contains('open');
   btn.classList.toggle('open', !isOpen);
   answer.classList.toggle('open', !isOpen);
+}
+
+// Arriving from a #section link (e.g. /faq/#capygames) opens that section's first question
+const linkedSection = location.hash && document.querySelector(`.faq-section${location.hash}`);
+if (linkedSection) {
+  const first = linkedSection.querySelector('.faq-question');
+  if (first) toggle(first);
 }
 
 const navToggle = document.getElementById('nav-toggle');

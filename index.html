@@ -268,7 +268,10 @@ body::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 20px;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
 }
+a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1px); }
 
 #hero h1 {
   font-family: 'Nunito', sans-serif;
@@ -1141,6 +1144,7 @@ body::before {
      HERO
 ============================================================ -->
 <section id="hero">
+  <a href="/faq/#capygames" id="hero-eyebrow">🍊 New · CapyGames: play in chat, earn Yuzu →</a>
   <h1>Give your <em>Capys</em> to streamers you love</h1>
   <p>100 Capys a day. Spend them on any stream using CapyRank. The community decides who gets seen — not the algorithm.</p>
   <a href="https://capyrank.com/join" class="btn-primary" id="btn-join-hero">
@@ -1276,6 +1280,12 @@ body::before {
         <div class="how-num">04</div>
         <div class="how-title">Get discovered</div>
         <div class="how-body">Your profile page shows your ranking, top supporters, and live status. Share it anywhere — it's your community's vote of confidence.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">05</div>
+        <div class="how-title">Play CapyGames 🍊</div>
+        <div class="how-body">In channels with CapyGames on, the bot runs quick chat games. Play to earn <strong>Yuzu</strong> (yours to keep) and win bonus Capys for the streamer — without touching your daily allowance.</div>
+        <div class="how-tip">No sign-up needed — just chat. <a href="/faq/#capygames">How CapyGames works →</a></div>
       </div>
     </div>
   </div>

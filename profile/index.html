@@ -538,6 +538,23 @@ body::before {
   margin-bottom: 24px;
 }
 
+/* CapyGames — yuzu row, only shown once a viewer has played */
+#yuzu-stats {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+#yuzu-stats .stat-card:first-child .sc-num { color: #f59a3c; }
+#yuzu-note {
+  display: none;
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-bottom: 24px;
+}
+#yuzu-note a { color: var(--yellow); text-decoration: none; font-weight: 700; }
+#yuzu-note a:hover { text-decoration: underline; }
+
 #given-breakdown h3 {
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
@@ -932,6 +949,21 @@ body::before {
           <div class="sc-label">Remaining Today</div>
         </div>
       </div>
+      <div id="yuzu-stats">
+        <div class="stat-card">
+          <div class="sc-num" id="vc-yuzu">—</div>
+          <div class="sc-label">🍊 Yuzu</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num" id="vc-played">—</div>
+          <div class="sc-label">Games Played</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num" id="vc-won">—</div>
+          <div class="sc-label">Games Won</div>
+        </div>
+      </div>
+      <div id="yuzu-note">🍊 Yuzu is earned by playing <a href="/faq/#capygames">CapyGames</a> in chat. No sign-up needed. Yuzu shop coming soon!</div>
       <div id="given-breakdown">
         <h3>Where they've given capys</h3>
         <div id="breakdown-list"></div>
@@ -1242,6 +1274,7 @@ async function loadViewerSection(username) {
   animateStat('vc-total',     data.total_given_alltime || 0);
   animateStat('vc-today',     data.daily_given         || 0);
   animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
+  renderYuzu(data);
 
   // Breakdown — fetch transactions FROM this user
   const userId = snap.docs[0].id;
@@ -1279,8 +1312,19 @@ async function loadViewerProfile(username) {
   animateStat('vc-total',     data.total_given_alltime || 0);
   animateStat('vc-today',     data.daily_given         || 0);
   animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
+  renderYuzu(data);
 
   loadGivenBreakdown(snap.docs[0].id);
+}
+
+// CapyGames — yuzu + games, from fields already on the user doc (no extra reads)
+function renderYuzu(data) {
+  if (!data.yuzu && !data.games_played) return;
+  document.getElementById('yuzu-stats').style.display = 'grid';
+  document.getElementById('yuzu-note').style.display  = 'block';
+  animateStat('vc-yuzu',   data.yuzu         || 0);
+  animateStat('vc-played', data.games_played || 0);
+  animateStat('vc-won',    data.games_won    || 0);
 }
 
 function renderReferralSection(username, data) {
