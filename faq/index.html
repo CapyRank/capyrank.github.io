@@ -80,7 +80,7 @@ body::before {
   object-fit: cover;
   object-position: top;
   position: relative;
-  bottom: -5px;
+  bottom: -3px;
   flex-shrink: 0;
 }
 #logo-text {
@@ -443,7 +443,7 @@ footer a:hover { color: var(--text); }
       <div class="faq-answer">
         CapyGames are quick, optional games the CapyRank bot runs in chat while a streamer is live. Every so often the bot announces a game, you join with one command, and 60 seconds later the results are in. You earn <strong>Yuzu 🍊</strong> just for playing, and winners earn bonus Capys for the streamer.
         <br><br>
-        Streamers choose whether to turn them on, so you'll only see them in some channels. <strong>No sign-up needed — just chat.</strong>
+        Streamers are always in control: games can be switched off at any time with <code>!capygames off</code> (see <a href="#streamer-controls">controls for streamers</a>), so you might not see them in every channel. <strong>No sign-up needed — just chat.</strong>
       </div>
     </div>
 
@@ -585,7 +585,7 @@ footer a:hover { color: var(--text); }
       </div>
     </div>
 
-    <div class="faq-item">
+    <div class="faq-item" id="streamer-controls">
       <button class="faq-question" onclick="toggle(this)">
         How do I control CapyGames in my channel?
         <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -652,12 +652,17 @@ function toggle(btn) {
   answer.classList.toggle('open', !isOpen);
 }
 
-// Arriving from a #section link (e.g. /faq/#capygames) opens that section's first question
-const linkedSection = location.hash && document.querySelector(`.faq-section${location.hash}`);
-if (linkedSection) {
-  const first = linkedSection.querySelector('.faq-question');
-  if (first) toggle(first);
+// A #link to a section (e.g. /faq/#capygames) opens its first question;
+// a #link to a single question (e.g. #streamer-controls) opens that one
+function openLinked() {
+  if (!location.hash) return;
+  const target = document.querySelector(location.hash);
+  if (!target) return;
+  const question = target.querySelector('.faq-question');
+  if (question && !question.classList.contains('open')) toggle(question);
 }
+openLinked();
+window.addEventListener('hashchange', openLinked);
 
 const navToggle = document.getElementById('nav-toggle');
 const headerNav = document.getElementById('header-nav');
