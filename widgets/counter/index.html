@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CapyRank — Capy Counter</title>
+<title>Capy Counter | CapyRank</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -55,7 +55,7 @@ body {
      1px  1px 0 rgba(0,0,0,0.6);
 }
 
-/* Tick-up animation — individual digits slide through */
+/* Tick-up animation - individual digits slide through */
 #counter-num.tick {
   animation: tick-up 0.25s ease;
 }
@@ -92,7 +92,7 @@ body {
 <div id="widget">
   <div id="icon">🐾</div>
   <div id="counter-body">
-    <div id="counter-num">—</div>
+    <div id="counter-num">…</div>
     <div id="counter-label">Capys</div>
   </div>
 </div>
@@ -189,10 +189,10 @@ async function start() {
     const value = data[field] || 0;
 
     if (prevValue === null) {
-      // First load — animate up from zero
+      // First load - animate up from zero
       animateCount(0, value, 1000);
     } else if (value !== prevValue) {
-      // Live tick — animate from old to new
+      // Live tick - animate from old to new
       numEl.classList.remove('tick');
       void numEl.offsetWidth;
       numEl.classList.add('tick');

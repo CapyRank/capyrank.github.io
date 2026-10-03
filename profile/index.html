@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CapyRank — Profile</title>
+<title>Profile | CapyRank</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -55,9 +55,7 @@ body::before {
   opacity: 0.4;
 }
 
-/* ============================================================
-   HEADER
-============================================================ */
+/* header */
 #header-band {
   background: var(--yellow);
   position: relative;
@@ -191,9 +189,7 @@ body::before {
   .btn-join { display: block; text-align: center; margin: 10px 20px 16px; }
 }
 
-/* ============================================================
-   MAIN
-============================================================ */
+/* main */
 #main {
   max-width: 900px;
   margin: 0 auto;
@@ -202,9 +198,7 @@ body::before {
   z-index: 1;
 }
 
-/* ============================================================
-   NOT FOUND
-============================================================ */
+/* not found */
 #not-found {
   text-align: center;
   padding: 80px 24px;
@@ -235,9 +229,7 @@ body::before {
 }
 .btn-back:hover { transform: translateY(-1px); }
 
-/* ============================================================
-   LOADING
-============================================================ */
+/* loading */
 #loading {
   text-align: center;
   padding: 80px 24px;
@@ -246,9 +238,7 @@ body::before {
   font-size: 15px;
 }
 
-/* ============================================================
-   PROFILE HERO
-============================================================ */
+/* profile hero */
 #profile-content { display: none; }
 
 #profile-hero {
@@ -346,9 +336,7 @@ body::before {
 }
 #twitch-link:hover { opacity: 0.85; }
 
-/* ============================================================
-   STAT CARDS
-============================================================ */
+/* stat cards */
 #stat-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -386,9 +374,7 @@ body::before {
   margin-top: 5px;
 }
 
-/* ============================================================
-   TOP GIVERS
-============================================================ */
+/* top givers */
 #top-givers-section {
   margin-bottom: 32px;
   animation: fade-up 0.4s ease 0.14s both;
@@ -513,9 +499,7 @@ body::before {
   display: none;
 }
 
-/* ============================================================
-   VIEWER SECTION
-============================================================ */
+/* viewer section */
 #viewer-section {
   margin-top: 48px;
   padding-top: 40px;
@@ -541,7 +525,7 @@ body::before {
   margin-bottom: 24px;
 }
 
-/* CapyGames — yuzu row, only shown once a viewer has played */
+/* CapyGames - yuzu row, only shown once a viewer has played */
 #yuzu-stats {
   display: none;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -595,9 +579,7 @@ body::before {
   color: var(--yellow);
 }
 
-/* ============================================================
-   FOOTER
-============================================================ */
+/* footer */
 #footer {
   border-top: 1px solid var(--border);
   padding: 28px 24px;
@@ -610,9 +592,7 @@ body::before {
 #footer a { color: var(--text-dim); text-decoration: none; }
 #footer a:hover { color: var(--text); }
 
-/* ============================================================
-   ANIMATIONS
-============================================================ */
+/* animations */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -629,9 +609,7 @@ body::before {
 }
 
 
-/* ============================================================
-   MOTTO
-============================================================ */
+/* motto */
 #profile-motto {
   display: none;
   font-size: 13px;
@@ -642,9 +620,7 @@ body::before {
 #profile-motto::before { content: '"'; color: var(--yellow); }
 #profile-motto::after  { content: '"'; color: var(--yellow); }
 
-/* ============================================================
-   LAST GAME
-============================================================ */
+/* last game */
 #last-game-section {
   margin-bottom: 32px;
   display: none;
@@ -693,9 +669,7 @@ body::before {
   margin-top: 2px;
 }
 
-/* ============================================================
-   CLIPS
-============================================================ */
+/* clips */
 #clips-section {
   margin-bottom: 32px;
   display: none;
@@ -757,9 +731,7 @@ body::before {
   color: var(--text-dimmer);
 }
 
-/* ============================================================
-   REFERRALS
-============================================================ */
+/* referrals */
 #referral-section {
   margin-top: 32px;
   padding-top: 32px;
@@ -834,7 +806,7 @@ body::before {
       <a href="/faq/" class="nav-link">FAQ</a>
       <a href="/widgets/" class="nav-link">Widgets</a>
       <a href="/live/" class="nav-link">Live</a>
-      <a href="#" class="nav-discord" title="CapyRank Discord — coming soon" aria-label="Discord">
+      <a href="#" class="nav-discord" title="CapyRank Discord (coming soon)" aria-label="Discord">
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
         </svg>
@@ -870,9 +842,9 @@ body::before {
         <div id="live-badge">● Live</div>
       </div>
       <div id="profile-meta">
-        <div id="profile-name">—</div>
+        <div id="profile-name">…</div>
         <div id="profile-league">Tier I</div>
-        <div id="profile-followers">— followers</div>
+        <div id="profile-followers">… followers</div>
         <div id="profile-motto"></div>
         <a id="twitch-link" href="#" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
@@ -884,23 +856,23 @@ body::before {
     <!-- STAT CARDS (streamer) -->
     <div id="stat-cards">
       <div class="stat-card">
-        <div class="sc-num" id="sc-total">—</div>
+        <div class="sc-num" id="sc-total">…</div>
         <div class="sc-label">Total Capys</div>
       </div>
       <div class="stat-card">
-        <div class="sc-num" id="sc-today">—</div>
+        <div class="sc-num" id="sc-today">…</div>
         <div class="sc-label">Today</div>
       </div>
       <div class="stat-card">
-        <div class="sc-num" id="sc-week">—</div>
+        <div class="sc-num" id="sc-week">…</div>
         <div class="sc-label">This Week</div>
       </div>
       <div class="stat-card">
-        <div class="sc-num" id="sc-month">—</div>
+        <div class="sc-num" id="sc-month">…</div>
         <div class="sc-label">This Month</div>
       </div>
       <div class="stat-card">
-        <div class="sc-num" id="sc-year">—</div>
+        <div class="sc-num" id="sc-year">…</div>
         <div class="sc-label">This Year</div>
       </div>
     </div>
@@ -911,7 +883,7 @@ body::before {
       <div id="last-game-card">
         <img id="last-game-art" src="" alt="">
         <div>
-          <div id="last-game-name">—</div>
+          <div id="last-game-name">…</div>
           <div id="last-game-label">Last streamed category</div>
         </div>
       </div>
@@ -942,29 +914,29 @@ body::before {
       <h2>Viewer <span>Stats</span></h2>
       <div id="viewer-stats">
         <div class="stat-card">
-          <div class="sc-num" id="vc-total">—</div>
+          <div class="sc-num" id="vc-total">…</div>
           <div class="sc-label">Capys Given</div>
         </div>
         <div class="stat-card">
-          <div class="sc-num" id="vc-today">—</div>
+          <div class="sc-num" id="vc-today">…</div>
           <div class="sc-label">Given Today</div>
         </div>
         <div class="stat-card">
-          <div class="sc-num" id="vc-remaining">—</div>
+          <div class="sc-num" id="vc-remaining">…</div>
           <div class="sc-label">Remaining Today</div>
         </div>
       </div>
       <div id="yuzu-stats">
         <div class="stat-card">
-          <div class="sc-num" id="vc-yuzu">—</div>
+          <div class="sc-num" id="vc-yuzu">…</div>
           <div class="sc-label"><span class="yuzu-emoji">🍊</span> Yuzu</div>
         </div>
         <div class="stat-card">
-          <div class="sc-num" id="vc-played">—</div>
+          <div class="sc-num" id="vc-played">…</div>
           <div class="sc-label">Games Played</div>
         </div>
         <div class="stat-card">
-          <div class="sc-num" id="vc-won">—</div>
+          <div class="sc-num" id="vc-won">…</div>
           <div class="sc-label">Games Won</div>
         </div>
       </div>
@@ -990,7 +962,7 @@ body::before {
 </main>
 
 <footer id="footer">
-  <p>🐾 CapyRank — <a href="/">Back to Rankings</a> &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#345c5158585b745755444d46555a5f1a575b59"><span class="__cf_email__" data-cfemail="177f727b7b78577476676e6576797c3974787a">[email&#160;protected]</span></a></p>
+  <p>🐾 CapyRank · <a href="/">Back to Rankings</a> &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#345c5158585b745755444d46555a5f1a575b59"><span class="__cf_email__" data-cfemail="177f727b7b78577476676e6576797c3974787a">[email&#160;protected]</span></a></p>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
@@ -998,9 +970,7 @@ import { initializeApp }     from 'https://www.gstatic.com/firebasejs/12.10.0/fi
 import { getFirestore, collection, doc, getDoc, query, where, orderBy, limit, getDocs }
   from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
 
-// ============================================================
-//  FIREBASE INIT
-// ============================================================
+// firebase init
 const firebaseConfig = {
   apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
   authDomain:        "capyrank-d8779.firebaseapp.com",
@@ -1013,9 +983,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
-// ============================================================
-//  LEAGUE HELPER
-// ============================================================
+// league helper
 const LEAGUES = [
   { name: 'Tier I',    min: 0,    max: 100    },
   { name: 'Tier II',        min: 101,  max: 300    },
@@ -1028,9 +996,7 @@ function getLeague(followers) {
   return LEAGUES.find(l => followers >= l.min && followers <= l.max)?.name ?? 'Tier I';
 }
 
-// ============================================================
-//  GIVER PERIOD CONFIG
-// ============================================================
+// giver period config
 const PERIOD_FIELD = {
   today:   'given_today',
   week:    'given_this_week',
@@ -1039,9 +1005,7 @@ const PERIOD_FIELD = {
   alltime: 'total_given_alltime',
 };
 
-// ============================================================
-//  MOBILE NAV TOGGLE
-// ============================================================
+// mobile nav toggle
 const navToggle = document.getElementById('nav-toggle');
 const headerNav = document.getElementById('header-nav');
 if (navToggle && headerNav) {
@@ -1054,9 +1018,7 @@ if (navToggle && headerNav) {
   });
 }
 
-// ============================================================
-//  URL PARAM
-// ============================================================
+// url param
 const params   = new URLSearchParams(window.location.search);
 const username = (params.get('user') || '').toLowerCase().trim();
 
@@ -1066,9 +1028,7 @@ if (!username) {
   loadProfile(username);
 }
 
-// ============================================================
-//  LOAD PROFILE
-// ============================================================
+// load profile
 async function loadProfile(username) {
   // Find streamer by username field
   const q    = query(collection(db, 'streamers'), where('username', '==', username), limit(1));
@@ -1086,7 +1046,7 @@ async function loadProfile(username) {
 
   if (data.hidden === true) { showNotFound(); return; }
 
-  document.title = `${data.display_name || username} — CapyRank`;
+  document.title = `${data.display_name || username} | CapyRank`;
 
   // Avatar
   const avatarEl = document.getElementById('profile-avatar');
@@ -1184,9 +1144,7 @@ async function loadProfile(username) {
   });
 }
 
-// ============================================================
-//  TOP GIVERS
-// ============================================================
+// top givers
 async function loadTopGivers(streamerId, period) {
   const list  = document.getElementById('givers-list');
   const empty = document.getElementById('givers-empty');
@@ -1210,7 +1168,7 @@ async function loadTopGivers(streamerId, period) {
 
     renderGivers(givers, field);
   } catch(e) {
-    // Index not ready yet — show empty
+    // Index not ready yet - show empty
     list.innerHTML = '';
     empty.style.display = 'block';
   }
@@ -1264,9 +1222,7 @@ function renderGivers(givers, field) {
   });
 }
 
-// ============================================================
-//  VIEWER SECTION
-// ============================================================
+// viewer section
 async function loadViewerSection(username) {
   const q    = query(collection(db, 'users'), where('username', '==', username), limit(1));
   const snap = await getDocs(q);
@@ -1281,13 +1237,13 @@ async function loadViewerSection(username) {
   animateStat('vc-remaining', Math.max(0, DAILY - (data.daily_given || 0)));
   renderYuzu(data);
 
-  // Breakdown — fetch transactions FROM this user
+  // Breakdown - fetch transactions FROM this user
   const userId = snap.docs[0].id;
   loadGivenBreakdown(userId);
 }
 
 async function loadViewerProfile(username) {
-  // Pure viewer — not a registered streamer
+  // Pure viewer - not a registered streamer
   const q    = query(collection(db, 'users'), where('username', '==', username), limit(1));
   const snap = await getDocs(q);
 
@@ -1297,9 +1253,9 @@ async function loadViewerProfile(username) {
   if (data.hidden === true) { showNotFound(); return; }
   const DAILY = data.daily_allowance || 100;
 
-  document.title = `${data.display_name || username} — CapyRank`;
+  document.title = `${data.display_name || username} | CapyRank`;
 
-  // Show a minimal profile — no streamer card, just viewer stats
+  // Show a minimal profile - no streamer card, just viewer stats
   const avatarEl = document.getElementById('profile-avatar');
   avatarEl.textContent = (data.display_name || username)[0].toUpperCase();
 
@@ -1322,7 +1278,7 @@ async function loadViewerProfile(username) {
   loadGivenBreakdown(snap.docs[0].id);
 }
 
-// CapyGames — yuzu + games, from fields already on the user doc (no extra reads)
+// CapyGames - yuzu + games, from fields already on the user doc (no extra reads)
 function renderYuzu(data) {
   if (!data.yuzu && !data.games_played) return;
   document.getElementById('yuzu-stats').style.display = 'grid';
@@ -1343,7 +1299,7 @@ function renderReferralSection(username, data) {
   const statsEl = document.getElementById('referral-stats');
   statsEl.innerHTML = count > 0
     ? `<span>${count.toLocaleString()}</span> streamer${count === 1 ? '' : 's'} referred · <span>${earned.toLocaleString()}</span> capys earned from referrals`
-    : `Share this link — when a streamer joins CapyRank using it, you both get 500 capys. 🐾`;
+    : `Share this link. When a streamer joins CapyRank using it, you both get 500 capys. 🐾`;
 
   const referredByEl = document.getElementById('referral-referred-by');
   if (data.referred_by) {
@@ -1394,9 +1350,7 @@ async function loadGivenBreakdown(userId) {
   }
 }
 
-// ============================================================
-//  UTILS
-// ============================================================
+// utils
 function showNotFound() {
   document.getElementById('loading').style.display   = 'none';
   document.getElementById('not-found').style.display = 'block';

@@ -12,9 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
 
-/* ============================================================
-   TOKENS
-============================================================ */
+/* tokens */
 :root {
   --bg:           #1c1a17;
   --bg-card:      #242220;
@@ -42,9 +40,7 @@
   --radius-sm: 8px;
 }
 
-/* ============================================================
-   RESET & BASE
-============================================================ */
+/* reset & base */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 html { scroll-behavior: smooth; }
@@ -70,9 +66,7 @@ body::before {
   opacity: 0.4;
 }
 
-/* ============================================================
-   HEADER BAND
-============================================================ */
+/* header band */
 #header-band {
   background: var(--yellow);
   position: relative;
@@ -244,9 +238,7 @@ body::before {
   }
 }
 
-/* ============================================================
-   HERO
-============================================================ */
+/* hero */
 #hero {
   position: relative;
   z-index: 1;
@@ -345,9 +337,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   color: var(--text);
 }
 
-/* ============================================================
-   STAT STRIP
-============================================================ */
+/* stat strip */
 #stat-strip {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -378,9 +368,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   margin-top: 3px;
 }
 
-/* ============================================================
-   MAIN CONTENT
-============================================================ */
+/* main content */
 #main {
   max-width: 1100px;
   margin: 0 auto;
@@ -389,9 +377,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   z-index: 1;
 }
 
-/* ============================================================
-   LEAGUE TABS + TIME FILTER
-============================================================ */
+/* league tabs + time filter */
 #leaderboard-header {
   display: flex;
   flex-direction: column;
@@ -480,9 +466,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   border: 1px solid var(--border);
 }
 
-/* ============================================================
-   LEADERBOARD TABLE
-============================================================ */
+/* leaderboard table */
 #leaderboard {
   display: flex;
   flex-direction: column;
@@ -613,9 +597,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 #empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
 #empty-state p { font-size: 14px; }
 
-/* ============================================================
-   HOW IT WORKS
-============================================================ */
+/* how it works */
 #how {
   margin-top: 80px;
   position: relative;
@@ -691,9 +673,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 }
 .how-tip a:hover { text-decoration: underline; }
 
-/* ============================================================
-   FOOTER
-============================================================ */
+/* footer */
 #footer {
   border-top: 1px solid var(--border);
   padding: 28px 24px;
@@ -706,18 +686,14 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 #footer a { color: var(--text-dim); text-decoration: none; }
 #footer a:hover { color: var(--text); }
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
+/* responsive */
 @media (max-width: 600px) {
   #stat-strip { gap: 24px; }
   #hero { padding: 48px 20px 40px; }
   .entry { grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px 14px; }
 }
 
-/* ============================================================
-   ANIMATIONS
-============================================================ */
+/* animations */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -728,9 +704,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 #main        { animation: fade-up 0.5s ease 0.18s both; }
 
 
-/* ============================================================
-   NEW CAPYS STRIP
-============================================================ */
+/* new capys strip */
 #new-capys-wrap {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -862,9 +836,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 }
 
 
-/* ============================================================
-   FEATURED CAPY
-============================================================ */
+/* featured capy */
 #featured-section {
   max-width: 640px;
   margin: 40px auto 0;
@@ -1000,9 +972,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 .featured-dot.active { background: var(--yellow); }
 
 
-/* ============================================================
-   LIVE TOASTS
-============================================================ */
+/* live toasts */
 #toast-container {
   position: fixed;
   bottom: 24px;
@@ -1114,9 +1084,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 </head>
 <body>
 
-<!-- ============================================================
-     HEADER
-============================================================ -->
+<!-- header -->
 <div id="header-band">
   <div id="header-inner">
     <a href="/" id="logo">
@@ -1128,7 +1096,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
       <a href="/widgets/" class="nav-link">Widgets</a>
       <a href="/live/" class="nav-link">Live</a>
       <a href="#how" class="nav-link">How it works</a>
-      <a href="#" class="nav-discord" title="CapyRank Discord — coming soon" aria-label="Discord">
+      <a href="#" class="nav-discord" title="CapyRank Discord (coming soon)" aria-label="Discord">
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
         </svg>
@@ -1143,13 +1111,11 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   </div>
 </div>
 
-<!-- ============================================================
-     HERO
-============================================================ -->
+<!-- hero -->
 <section id="hero">
   <a href="/faq/#capygames" id="hero-eyebrow">🍊 New · CapyGames: play in chat, earn Yuzu →</a>
   <h1>Give your <em>Capys</em> to streamers you love</h1>
-  <p>100 Capys a day. Spend them on any stream using CapyRank. The community decides who gets seen — not the algorithm.</p>
+  <p>100 Capys a day. Spend them on any stream using CapyRank. The community decides who gets seen, not the algorithm.</p>
   <a href="https://capyrank.com/join" class="btn-primary" id="btn-join-hero">
     🐾 Join CapyRank
   </a>
@@ -1157,20 +1123,18 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   <button class="btn-secondary" id="btn-random-capy">🎲 Random Capy</button>
 </section>
 
-<!-- ============================================================
-     STAT STRIP
-============================================================ -->
+<!-- stat strip -->
 <div id="stat-strip">
   <div class="stat">
-    <div class="stat-num" id="stat-streamers">—</div>
+    <div class="stat-num" id="stat-streamers">…</div>
     <div class="stat-label">Streamers</div>
   </div>
   <div class="stat">
-    <div class="stat-num" id="stat-capys">—</div>
+    <div class="stat-num" id="stat-capys">…</div>
     <div class="stat-label">Capys given today</div>
   </div>
   <div class="stat">
-    <div class="stat-num" id="stat-alltime">—</div>
+    <div class="stat-num" id="stat-alltime">…</div>
     <div class="stat-label">Capys All Time</div>
   </div>
   <a class="stat" id="stat-live-wrap" href="/live/" style="display:none;text-decoration:none;">
@@ -1182,9 +1146,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 </div>
 
 
-<!-- ============================================================
-     NEW CAPYS STRIP
-============================================================ -->
+<!-- new capys strip -->
 <div id="new-capys-wrap">
   <div id="new-capys-inner">
     <div id="new-capys-label">🐾 Who's NEW?!</div>
@@ -1197,9 +1159,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
 </div>
 
 
-<!-- ============================================================
-     FEATURED CAPY
-============================================================ -->
+<!-- featured capy -->
 <section id="featured-section">
   <h2>Featured <span>Capy</span></h2>
   <div id="featured-card-wrap"></div>
@@ -1210,9 +1170,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   </div>
 </section>
 
-<!-- ============================================================
-     LEADERBOARD
-============================================================ -->
+<!-- leaderboard -->
 <main id="main">
   <div id="leaderboard-section">
     <div id="leaderboard-header">
@@ -1246,7 +1204,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
     </div>
 
     <div id="leaderboard">
-      <!-- Populated by JS — placeholder entries until Firebase is wired -->
+      <!-- Populated by JS - placeholder entries until Firebase is wired -->
     </div>
 
     <div id="empty-state">
@@ -1256,9 +1214,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   </div>
 </main>
 
-<!-- ============================================================
-     HOW IT WORKS
-============================================================ -->
+<!-- how it works -->
 <section id="how">
   <div id="how-inner">
     <h2>How it <span>works</span></h2>
@@ -1271,8 +1227,8 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
       <div class="how-card">
         <div class="how-num">02</div>
         <div class="how-title">Viewers give Capys daily</div>
-        <div class="how-body">Every viewer gets 100 Capys per day to spend across any connected channel. Type <strong>!capy</strong> in chat — or <strong>!capy 10</strong> to give more at once.</div>
-        <div class="how-tip">💛 <a href="https://twitch.tv/capyrank" target="_blank" rel="noopener">Follow CapyRank on Twitch</a> to unlock an extra 50 Capys a day — more love to spread!</div>
+        <div class="how-body">Every viewer gets 100 Capys per day to spend across any connected channel. Type <strong>!capy</strong> in chat, or <strong>!capy 10</strong> to give more at once.</div>
+        <div class="how-tip">💛 <a href="https://twitch.tv/capyrank" target="_blank" rel="noopener">Follow CapyRank on Twitch</a> to unlock an extra 50 Capys a day. More love to spread!</div>
       </div>
       <div class="how-card">
         <div class="how-num">03</div>
@@ -1282,28 +1238,24 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
       <div class="how-card">
         <div class="how-num">04</div>
         <div class="how-title">Get discovered</div>
-        <div class="how-body">Your profile page shows your ranking, top supporters, and live status. Share it anywhere — it's your community's vote of confidence.</div>
+        <div class="how-body">Your profile page shows your ranking, top supporters, and live status. Share it anywhere. It's your community's vote of confidence.</div>
       </div>
       <div class="how-card">
         <div class="how-num">05</div>
         <div class="how-title">Play CapyGames 🍊</div>
-        <div class="how-body">In channels with CapyGames on, the bot runs quick chat games. Play to earn <strong>Yuzu</strong> (yours to keep) and win bonus Capys for the streamer — without touching your daily allowance.</div>
-        <div class="how-tip">No sign-up needed — just chat. <a href="/faq/#capygames">How CapyGames works →</a></div>
+        <div class="how-body">In channels with CapyGames on, the bot runs quick chat games. Play to earn <strong>Yuzu</strong> (yours to keep) and win bonus Capys for the streamer, without touching your daily allowance.</div>
+        <div class="how-tip">No sign-up needed, just chat. <a href="/faq/#capygames">How CapyGames works →</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     LIVE TOAST CONTAINER
-============================================================ -->
+<!-- live toast container -->
 <div id="toast-container" aria-live="polite" aria-label="Live activity"></div>
 
-<!-- ============================================================
-     FOOTER
-============================================================ -->
+<!-- footer -->
 <footer id="footer">
-  <p>🐾 CapyRank — Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#5c34393030331c3f3d2c252e3d3237723f3331"><span class="__cf_email__" data-cfemail="ff979a939390bf9c9e8f868d9e9194d19c9092">[email&#160;protected]</span></a></p>
+  <p>🐾 CapyRank · Built for small streamers, by someone who likes capybaras. &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#5c34393030331c3f3d2c252e3d3237723f3331"><span class="__cf_email__" data-cfemail="ff979a939390bf9c9e8f868d9e9194d19c9092">[email&#160;protected]</span></a></p>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
@@ -1311,9 +1263,7 @@ import { initializeApp }              from 'https://www.gstatic.com/firebasejs/1
 import { getFirestore, collection, query, where, orderBy, limit, getDocs, getCountFromServer, onSnapshot, doc }
   from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js';
 
-// ============================================================
-//  FIREBASE INIT
-// ============================================================
+// firebase init
 const firebaseConfig = {
   apiKey:            "AIzaSyAfPwN5Yn9oCfn-WUeG1Emq7fDBh9dJq4Q",
   authDomain:        "capyrank-d8779.firebaseapp.com",
@@ -1326,9 +1276,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
-// ============================================================
-//  LEAGUE CONFIG
-// ============================================================
+// league config
 const LEAGUE_RANGES = {
   cub:     [0,    100],
   capy:    [101,  300],
@@ -1347,15 +1295,11 @@ const TIME_FIELD = {
   alltime: 'capys_total',
 };
 
-// ============================================================
-//  STATE
-// ============================================================
+// state
 let activeLeague = 'all';
 let activeTime   = 'alltime';
 
-// ============================================================
-//  FETCH LEADERBOARD FROM FIRESTORE
-// ============================================================
+// fetch leaderboard from firestore
 async function fetchLeaderboard(league, time) {
   const field  = TIME_FIELD[time] || 'capys_this_week';
   const range  = LEAGUE_RANGES[league];
@@ -1363,7 +1307,7 @@ async function fetchLeaderboard(league, time) {
 
   let q;
   if (range) {
-    // Fetch streamers in follower range — Firestore requires orderBy('followers') first
+    // Fetch streamers in follower range - Firestore requires orderBy('followers') first
     // when using inequality filters on followers. Sort by capys client-side instead.
     q = query(ref,
       where('followers', '>=', range[0]),
@@ -1379,7 +1323,7 @@ async function fetchLeaderboard(league, time) {
       .sort((a, b) => (b[field] || 0) - (a[field] || 0))
       .slice(0, 25);
   } else {
-    // "all" — no follower filter, only show streamers with capys
+    // "all" - no follower filter, only show streamers with capys
     q = query(ref,
       where(field, '>', 0),
       where('hidden', '==', false),
@@ -1391,15 +1335,13 @@ async function fetchLeaderboard(league, time) {
   }
 }
 
-// ============================================================
-//  FETCH GLOBAL STATS
-// ============================================================
+// fetch global stats
 async function fetchStats() {
   try {
     const streamersSnap = await getCountFromServer(collection(db, 'streamers'));
     const count = streamersSnap.data().count;
     animateStat('stat-streamers', 0, count, 1000);
-    // capys_today and communities require aggregation — bot writes these to a 'meta/global' doc
+    // capys_today and communities require aggregation - bot writes these to a 'meta/global' doc
     const metaSnap = await getDocs(query(collection(db, 'meta')));
     metaSnap.forEach(doc => {
       if (doc.id === 'global') {
@@ -1409,13 +1351,11 @@ async function fetchStats() {
       }
     });
   } catch(e) {
-    // Stats unavailable — leave as dashes
+    // Stats unavailable - leave as dashes
   }
 }
 
-// ============================================================
-//  RENDER LEADERBOARD
-// ============================================================
+// render leaderboard
 async function renderLeaderboard() {
   const lb    = document.getElementById('leaderboard');
   const empty = document.getElementById('empty-state');
@@ -1483,9 +1423,7 @@ async function renderLeaderboard() {
   });
 }
 
-// ============================================================
-//  TABS & FILTERS
-// ============================================================
+// tabs & filters
 document.querySelectorAll('.league-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.league-tab').forEach(b => b.classList.remove('active'));
@@ -1504,14 +1442,10 @@ document.querySelectorAll('.time-btn').forEach(btn => {
   });
 });
 
-// ============================================================
-//  JOIN BUTTONS — placeholder for Twitch OAuth
-// ============================================================
+// join buttons - placeholder for twitch oauth
 
 
-// ============================================================
-//  UTILS
-// ============================================================
+// utils
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -1538,9 +1472,7 @@ function animateStat(id, from, to, duration) {
 }
 
 
-// ============================================================
-//  NEW CAPYS STRIP
-// ============================================================
+// new capys strip
 async function fetchNewestCapys() {
   try {
     const ref = collection(db, 'streamers');
@@ -1549,7 +1481,7 @@ async function fetchNewestCapys() {
     const streamers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderNewestStrip(streamers);
   } catch(e) {
-    // joined_at index may not exist yet — fall back to just fetching all and showing them
+    // joined_at index may not exist yet - fall back to just fetching all and showing them
     try {
       const snap = await getDocs(query(collection(db, 'streamers'), where('hidden', '==', false), limit(20)));
       renderNewestStrip(snap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -1585,9 +1517,7 @@ function renderNewestStrip(streamers) {
   }).join('');
 }
 
-// ============================================================
-//  LIVE TOASTS
-// ============================================================
+// live toasts
 const TOAST_QUEUE_THRESHOLD = 3;   // pending queue depth before busy mode kicks in
 const TOAST_BUSY_MIN_CAPYS  = 5;   // min capys required to show a toast in busy mode
 const MAX_VISIBLE_TOASTS    = 2;   // max toasts visible simultaneously
@@ -1661,7 +1591,7 @@ function startLiveToasts() {
   const lastSeen  = {};
 
   onSnapshot(txRef, (snap) => {
-    // On first snapshot, just record baselines — don't toast for existing data
+    // On first snapshot, just record baselines - don't toast for existing data
     if (initialLoad) {
       snap.docs.forEach(d => { lastSeen[d.id] = d.data().given_today || 0; });
       initialLoad = false;
@@ -1690,9 +1620,7 @@ function startLiveToasts() {
   });
 }
 
-// ============================================================
-//  LIVE HERD COUNT  (streamers live right now)
-// ============================================================
+// live herd count (streamers live right now)
 function startLiveHerd() {
   const liveQuery = query(collection(db, 'streamers'), where('live', '==', true), where('hidden', '==', false));
   let   prevCount = null;
@@ -1705,7 +1633,7 @@ function startLiveHerd() {
 
     if (!wrap || !numEl) return;
 
-    // Always show the stat once we have data — hide only if truly 0 on first load
+    // Always show the stat once we have data - hide only if truly 0 on first load
     // After that let it count down naturally so it doesn't jump in/out
     if (prevCount === null) {
       if (count > 0) wrap.style.display = '';
@@ -1732,9 +1660,7 @@ function startLiveHerd() {
   });
 }
 
-// ============================================================
-//  FEATURED CAPY  (random live streamer, carousel if multiple)
-// ============================================================
+// featured capy (random live streamer, carousel if multiple)
 let featuredData     = [];
 let featuredIndex    = 0;
 let featuredTimer    = null;
@@ -1831,16 +1757,14 @@ function renderFeatured() {
   }
 }
 
-// ============================================================
-//  LIVE STAT COUNTERS  (re-animate when meta/global updates)
-// ============================================================
+// live stat counters (re-animate when meta/global updates)
 function startLiveStats() {
   const metaRef  = doc(db, 'meta', 'global');
   let   firstSnap = true;
 
   onSnapshot(metaRef, (snap) => {
     if (!snap.exists()) return;
-    // Skip the very first snapshot — fetchStats() already handled the initial load
+    // Skip the very first snapshot - fetchStats() already handled the initial load
     if (firstSnap) { firstSnap = false; return; }
     const d = snap.data();
     if (d.capys_today)   animateStat('stat-capys',   0, d.capys_today,   800);
@@ -1848,9 +1772,7 @@ function startLiveStats() {
   });
 }
 
-// ============================================================
-//  RANDOM CAPY
-// ============================================================
+// random capy
 async function goRandomCapy() {
   const btn = document.getElementById('btn-random-capy');
   if (btn) { btn.textContent = '🐾 Finding...'; btn.disabled = true; }

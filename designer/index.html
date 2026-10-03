@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capy Designer — CapyRank</title>
-<meta name="description" content="Design your CapyRank capy — try on hats, accessories, fur colours and name styles, then unlock them with Yuzu.">
+<title>Capy Designer | CapyRank</title>
+<meta name="description" content="Design your CapyRank capy: try on hats, accessories, fur colours and name styles, then unlock them with Yuzu.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -142,7 +142,7 @@ body {
   padding: 10px 12px; background: var(--yellow-glow); border: 1px solid var(--border-warm); border-radius: var(--radius-sm);
 }
 #shop-note strong { color: var(--text); }
-.emoji { color: #fff; }   /* emoji take on the text colour's transparency — keep them bright */
+.emoji { color: #fff; }   /* emoji take on the text colour's transparency - keep them bright */
 #shop-note a { color: var(--yellow); text-decoration: none; font-weight: 700; }
 
 /* Name styles */
@@ -205,21 +205,19 @@ footer a { color: var(--text-dim); text-decoration: none; }
         </div>
       </div>
       <div id="shop-note">
-        <span class="emoji">🍊</span> <strong>Yuzu shop coming soon.</strong> Earn Yuzu by playing <a href="/faq/#capygames">CapyGames</a> in chat — no sign-up needed — and spend it here on your look.
+        <span class="emoji">🍊</span> <strong>Yuzu shop coming soon.</strong> Earn Yuzu by playing <a href="/faq/#capygames">CapyGames</a> in chat (no sign-up needed) and spend it here on your look.
       </div>
     </div>
   </div>
 </main>
 
 <footer>
-  <p>🐾 CapyRank — <a href="/">Back to Rankings</a></p>
+  <p>🐾 CapyRank · <a href="/">Back to Rankings</a></p>
 </footer>
 
 <script>
-// ============================================================
-//  SPRITE — a 40×30 pixel capy, drawn from simple shapes.
-//  Hats and accessories are small pixel layers on top; fur colours swap the palette.
-// ============================================================
+// sprite - a 40×30 pixel capy, drawn from simple shapes.
+// Hats and accessories are small pixel layers on top; fur colours swap the palette.
 const W = 40, H = 30;
 const OUTLINE = '#22160c';
 
@@ -299,9 +297,7 @@ const DEFAULT = { fur: 0, hat: 1, accessory: 0, nameColor: 0, nameStyle: 0 };   
 let look = { ...DEFAULT };
 let bob = 0, blinking = false;
 
-// ============================================================
-//  BUILD THE BASE CAPY (side view, facing right)
-// ============================================================
+// build the base capy (side view, facing right)
 function buildMask() {
   const m = Array.from({ length: H }, () => new Array(W).fill(false));
   const set  = (x, y) => { if (x >= 0 && x < W && y >= 0 && y < H) m[y][x] = true; };
@@ -368,15 +364,13 @@ function layerPixels(layer, x0, y0) {
   return px;
 }
 
-// ============================================================
-//  DRAW
-// ============================================================
+// draw
 const canvas = document.getElementById('capy-canvas');
 const ctx    = canvas.getContext('2d');
 const dot    = (x, y, c, a = 1) => { ctx.globalAlpha = a; ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); ctx.globalAlpha = 1; };
 
 function draw() {
-  ctx.clearRect(0, 0, W, H);   // plain stage — the page behind it shows through
+  ctx.clearRect(0, 0, W, H);   // plain stage - the page behind it shows through
   const lift = bob ? -1 : 0;   // gentle idle bob
   const pixels = capyPixels(FUR[look.fur]);
   const hat = HATS[look.hat];
@@ -387,9 +381,7 @@ function draw() {
   renderName();
 }
 
-// ============================================================
-//  NAME LABEL
-// ============================================================
+// name label
 const nameEl    = document.getElementById('capy-name');
 const nameInput = document.getElementById('name-input');
 
@@ -403,9 +395,7 @@ function renderName() {
 }
 nameInput.addEventListener('input', renderName);
 
-// ============================================================
-//  CONTROLS
-// ============================================================
+// controls
 const optionsEl = document.getElementById('options');
 
 OPTIONS.forEach(opt => {
@@ -452,9 +442,7 @@ document.getElementById('btn-random').addEventListener('click', () => {
 });
 document.getElementById('btn-reset').addEventListener('click', () => { look = { ...DEFAULT }; refresh(); });
 
-// ============================================================
-//  IDLE ANIMATION — a slow bob and the occasional blink
-// ============================================================
+// idle animation - a slow bob and the occasional blink
 const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!calm) {
   setInterval(() => { bob = bob ? 0 : 1; draw(); }, 700);

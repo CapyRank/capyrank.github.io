@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CapyRank — Rank Badge</title>
+<title>Rank Badge | CapyRank</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -100,7 +100,7 @@ body {
 <div id="widget">
   <div id="tier-bar"></div>
   <div id="rank-body">
-    <div id="rank-num">—</div>
+    <div id="rank-num">…</div>
     <div id="tier-name">CapyRank</div>
     <div id="capy-count"></div>
   </div>
@@ -225,7 +225,7 @@ function renderRank({ rank, tier, capys }) {
   tierBarEl.style.color      = color; // for box-shadow currentColor
 
   // Rank number
-  const rankText = rank ? `#${rank}` : '#—';
+  const rankText = rank ? `#${rank}` : '#…';
   if (rankNumEl.textContent !== rankText) {
     rankNumEl.classList.remove('bump');
     void rankNumEl.offsetWidth;
@@ -262,7 +262,7 @@ async function start() {
     if (!docSnap.exists()) return;
     const data = docSnap.data();
 
-    // Debounce rank recalc — capys can update rapidly
+    // Debounce rank recalc - capys can update rapidly
     clearTimeout(rankDebounce);
     rankDebounce = setTimeout(async () => {
       try {
