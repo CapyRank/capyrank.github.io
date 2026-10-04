@@ -587,6 +587,29 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   transition: width 0.6s ease;
 }
 
+/* top givers */
+#givers-section { margin-top: 64px; }
+#givers-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+#givers-header h2 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+#givers-header h2 span { color: var(--yellow); }
+#givers-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+#givers-blurb { font-size: 13px; color: var(--text-dimmer); margin-bottom: 18px; }
+#givers-list { display: flex; flex-direction: column; gap: 4px; }
+#givers-list .givers-empty { text-align: center; padding: 32px 16px; color: var(--text-dimmer); font-size: 14px; }
+
 /* Empty state */
 #empty-state {
   text-align: center;
@@ -1212,6 +1235,20 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
       <p>No streamers in this league yet.<br>Be the first to join CapyRank!</p>
     </div>
   </div>
+
+  <!-- top givers: viewers across the whole site -->
+  <div id="givers-section">
+    <div id="givers-header">
+      <h2>Top <span>Givers</span></h2>
+      <div id="givers-tabs">
+        <button class="time-btn active" data-board="alltime">All time</button>
+        <button class="time-btn" data-board="explorer">Herd Explorer</button>
+        <button class="time-btn" data-board="streak">Streak</button>
+      </div>
+    </div>
+    <p id="givers-blurb"></p>
+    <div id="givers-list"></div>
+  </div>
 </main>
 
 <!-- how it works -->
@@ -1323,15 +1360,15 @@ async function fetchLeaderboard(league, time) {
       .sort((a, b) => (b[field] || 0) - (a[field] || 0))
       .slice(0, 25);
   } else {
-    // "all" - no follower filter, only show streamers with capys
-    q = query(ref,
-      where(field, '>', 0),
-      where('hidden', '==', false),
-      orderBy(field, 'desc'),
-      limit(25)
-    );
+    // "all" - no follower filter, only show streamers with capys.
+    // Sorting on one field works with Firestore's automatic indexes; filtering hidden streamers
+    // in the query too would need a composite index per time period, so that's done here instead.
+    q = query(ref, orderBy(field, 'desc'), limit(60));
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.hidden === false && (s[field] || 0) > 0)
+      .slice(0, 25);
   }
 }
 
@@ -1789,9 +1826,99 @@ async function goRandomCapy() {
   }
 }
 
+// top givers
+// Each board sorts on a single field of the viewer docs, which Firestore's automatic indexes
+// handle; hidden viewers and expired streaks are filtered out here.
+const GIVER_BOARDS = {
+  alltime:  { field: 'total_given_alltime', label: 'capys given',
+              blurb: 'The most generous viewers on CapyRank, game wins included.' },
+  explorer: { field: 'streamers_supported', label: 'streamers',
+              blurb: 'Viewers who have supported the most different streamers. Discover someone new!' },
+  streak:   { field: 'streak_days',         label: 'day streak',
+              blurb: 'Days in a row giving capys, anywhere on CapyRank. Miss a day and it starts again.' },
+};
+let activeBoard = 'alltime';
+
+function utcDay(offsetDays = 0) {
+  const d = new Date(Date.now() + offsetDays * 86400000);
+  return d.toISOString().slice(0, 10);
+}
+
+async function renderGivers() {
+  const board = GIVER_BOARDS[activeBoard];
+  const list  = document.getElementById('givers-list');
+  document.getElementById('givers-blurb').textContent = board.blurb;
+  list.innerHTML = '<div class="givers-empty">Loading…</div>';
+
+  let rows = [];
+  try {
+    const snap = await getDocs(query(collection(db, 'users'), orderBy(board.field, 'desc'), limit(40)));
+    const liveDays = [utcDay(0), utcDay(-1)];    // a streak still counts if they gave today or yesterday
+    rows = snap.docs
+      .map(d => d.data())
+      .filter(u => u.hidden !== true && (u[board.field] || 0) > 0)
+      .filter(u => activeBoard !== 'streak' || liveDays.includes(u.streak_last_day))
+      .slice(0, 10);
+  } catch (e) {
+    list.innerHTML = '<div class="givers-empty">Could not load top givers.</div>';
+    return;
+  }
+
+  if (!rows.length) {
+    list.innerHTML = '<div class="givers-empty">Nobody here yet. Give some capys to claim the top spot! 🐾</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  rows.forEach((u, i) => {
+    const rank  = i + 1;
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const name  = u.display_name || u.username || '?';
+    const sub   = activeBoard === 'streak'
+      ? `Best: ${(u.streak_best || u.streak_days).toLocaleString()} days`
+      : activeBoard === 'explorer'
+        ? `${(u.total_given_alltime || 0).toLocaleString()} capys given`
+        : u.streamers_supported
+          ? `${u.streamers_supported.toLocaleString()} streamer${u.streamers_supported === 1 ? '' : 's'} supported`
+          : '';
+
+    const el = document.createElement('a');
+    el.className = `entry${rank <= 3 ? ` rank-${rank}` : ''}`;
+    el.href = `/profile/?user=${encodeURIComponent(u.username || '')}`;
+    el.innerHTML = `
+      <div class="entry-rank">${medal}</div>
+      <div class="entry-info">
+        <div class="entry-avatar" style="background:${avatarColour(u.username || name)};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:rgba(255,255,255,0.8);font-family:'Nunito',sans-serif;">
+          ${u.avatar_url
+            ? `<img src="${escHtml(u.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="">`
+            : escHtml(name[0].toUpperCase())}
+        </div>
+        <div style="min-width:0">
+          <div class="entry-name">${escHtml(name)}</div>
+          <div class="entry-sub">${sub}</div>
+        </div>
+      </div>
+      <div class="entry-score">
+        <div class="score-num">${(u[board.field] || 0).toLocaleString()}</div>
+        <div class="score-label">${board.label}</div>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+document.querySelectorAll('#givers-tabs .time-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#givers-tabs .time-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeBoard = btn.dataset.board;
+    renderGivers();
+  });
+});
+
 // Init
 fetchStats();
 renderLeaderboard();
+renderGivers();
 startLiveToasts();
 startLiveStats();
 startLiveHerd();

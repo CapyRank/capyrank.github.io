@@ -525,6 +525,15 @@ body::before {
   margin-bottom: 24px;
 }
 
+/* giving streak + herd explorer chips */
+#giver-badges { display: none; gap: 8px; flex-wrap: wrap; margin: -8px 0 20px; }
+.giver-badge {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; color: var(--text-dim);
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 6px 12px;
+}
+.giver-badge strong { color: var(--text); }
+.giver-badge .badge-emoji { color: #fff; }
+
 /* CapyGames - yuzu row, only shown once a viewer has played */
 #yuzu-stats {
   display: none;
@@ -926,6 +935,7 @@ body::before {
           <div class="sc-label">Remaining Today</div>
         </div>
       </div>
+      <div id="giver-badges"></div>
       <div id="yuzu-stats">
         <div class="stat-card">
           <div class="sc-num" id="vc-yuzu">…</div>
@@ -1278,8 +1288,28 @@ async function loadViewerProfile(username) {
   loadGivenBreakdown(snap.docs[0].id);
 }
 
+// Giving streak + Herd Explorer, from fields already on the user doc (no extra reads)
+function renderGiverBadges(data) {
+  const badges = [];
+  const today     = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const streak    = [today, yesterday].includes(data.streak_last_day) ? (data.streak_days || 0) : 0;
+  if (streak) {
+    const best = data.streak_best > streak ? ` (best ${data.streak_best})` : '';
+    badges.push(`<span class="badge-emoji">🔥</span> <strong>${streak}-day</strong> giving streak${best}`);
+  }
+  if (data.streamers_supported) {
+    const n = data.streamers_supported;
+    badges.push(`<span class="badge-emoji">🧭</span> Supported <strong>${n}</strong> streamer${n === 1 ? '' : 's'}`);
+  }
+  const el = document.getElementById('giver-badges');
+  el.innerHTML = badges.map(b => `<span class="giver-badge">${b}</span>`).join('');
+  el.style.display = badges.length ? 'flex' : 'none';
+}
+
 // CapyGames - yuzu + games, from fields already on the user doc (no extra reads)
 function renderYuzu(data) {
+  renderGiverBadges(data);
   if (!data.yuzu && !data.games_played) return;
   document.getElementById('yuzu-stats').style.display = 'grid';
   document.getElementById('yuzu-note').style.display  = 'block';
