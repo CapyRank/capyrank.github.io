@@ -683,6 +683,26 @@ footer a:hover { color: var(--text); }
             onfocus="this.style.borderColor='var(--yellow)'"
             onblur="this.style.borderColor='var(--border)'"
           >
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dimmer);white-space:nowrap;">
+            Show for
+            <input
+              id="overlay-duration"
+              type="number" min="1" max="60" step="0.5" value="4.5"
+              style="
+                width:64px;
+                background:var(--bg);
+                border:1px solid var(--border);
+                border-radius:20px;
+                padding:9px 10px;
+                font-family:'Nunito Sans',sans-serif;
+                font-size:14px;
+                color:var(--text);
+                outline:none;
+                text-align:center;
+              "
+            >
+            seconds
+          </label>
           <button
             id="overlay-copy-btn"
             class="btn-download"
@@ -799,6 +819,16 @@ function copyCounterUrl() {
 }
 
 // ── Overlay (existing) ────────────────────────────────────────
+// Adds &duration=N only when it differs from the overlay's default of 4.5 seconds
+function overlayUrl(username) {
+  let url = 'https://capyrank.com/widgets/overlay/?user=' + encodeURIComponent(username);
+  const secs = Number(document.getElementById('overlay-duration').value);
+  if (Number.isFinite(secs) && secs > 0 && secs !== 4.5) {
+    url += '&duration=' + Math.min(60, Math.max(1, secs));
+  }
+  return url;
+}
+
 function copyOverlayUrl() {
   const username = document.getElementById('overlay-username').value.trim().toLowerCase();
   const btn      = document.getElementById('overlay-copy-btn');
@@ -811,7 +841,7 @@ function copyOverlayUrl() {
     return;
   }
 
-  const url = 'https://capyrank.com/widgets/overlay/?user=' + encodeURIComponent(username);
+  const url = overlayUrl(username);
 
   preview.textContent = url;
   preview.style.display = 'block';
@@ -828,18 +858,21 @@ function copyOverlayUrl() {
 
 // Live preview as they type
 document.addEventListener('DOMContentLoaded', () => {
-  const input   = document.getElementById('overlay-username');
-  const preview = document.getElementById('overlay-url-preview');
+  const input    = document.getElementById('overlay-username');
+  const duration = document.getElementById('overlay-duration');
+  const preview  = document.getElementById('overlay-url-preview');
+  const update   = () => {
+    const u = input.value.trim().toLowerCase();
+    if (u) {
+      preview.textContent = overlayUrl(u);
+      preview.style.display = 'block';
+    } else {
+      preview.style.display = 'none';
+    }
+  };
   if (input) {
-    input.addEventListener('input', () => {
-      const u = input.value.trim().toLowerCase();
-      if (u) {
-        preview.textContent = 'https://capyrank.com/widgets/overlay/?user=' + encodeURIComponent(u);
-        preview.style.display = 'block';
-      } else {
-        preview.style.display = 'none';
-      }
-    });
+    input.addEventListener('input', update);
+    duration.addEventListener('input', update);
   }
 });
 </script>

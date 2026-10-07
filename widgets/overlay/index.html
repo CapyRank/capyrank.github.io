@@ -140,6 +140,12 @@ const db  = getFirestore(app);
 const params   = new URLSearchParams(window.location.search);
 const username = (params.get('user') || '').toLowerCase().trim();
 
+// ?duration=8 keeps each alert on screen for 8 seconds (default 4.5, allowed 1 to 60)
+const durationSecs = Number(params.get('duration'));
+const SHOW_MS = Number.isFinite(durationSecs) && durationSecs > 0
+  ? Math.min(60, Math.max(1, durationSecs)) * 1000
+  : 4500;
+
 // ── Alert queue ──────────────────────────────────────────────
 const queue   = [];
 let   showing = false;
@@ -184,7 +190,7 @@ function showAlert({ name, amount, avatarUrl }) {
       el.classList.remove('hide');
       processQueue();
     }, 600);
-  }, 4500);
+  }, SHOW_MS);
 }
 
 // ── Start listening ──────────────────────────────────────────
