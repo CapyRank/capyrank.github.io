@@ -1112,6 +1112,7 @@ a#hero-eyebrow:hover { border-color: var(--yellow-dim); transform: translateY(-1
   <div id="header-inner">
     <a href="/" id="logo">
       <img src="icon.png" alt="CapyRank" id="logo-capy">
+      <script>/* october: vampire capy */ if (new Date().getMonth() === 9) { const l = document.getElementById('logo-capy'); l.src = l.getAttribute('src').replace('icon.png', 'icon-halloween.png'); }</script>
       <div id="logo-text">Capy<span>Rank</span></div>
     </a>
     <nav id="header-nav">
